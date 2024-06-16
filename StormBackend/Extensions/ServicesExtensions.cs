@@ -21,7 +21,9 @@ namespace StormBackend.Extensions
     {
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
         {
+            DotNetEnv.Env.Load();
             var connectionString = DotNetEnv.Env.GetString("CONNECTION_STRING");
+            
             services.AddDbContext<AppDBContext>(
                 options => options.UseSqlServer(
                     connectionString, 
