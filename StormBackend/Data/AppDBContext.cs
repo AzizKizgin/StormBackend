@@ -19,12 +19,40 @@ namespace StormBackend.Data
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<GroupMembership> GroupMemberships { get; set; }
+        public DbSet<EmojiReaction> EmojiReactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<GroupMembership>()
-                .HasKey(gm => new {gm.UserId, gm.GroupId});
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Chats)
+                .WithOne(c => c.User1)
+                .HasForeignKey(c => c.User1Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Contacts)
+                .WithOne(c => c.User)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.GroupMemberships)
+                .WithOne(gm => gm.User)
+                .HasForeignKey(gm => gm.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Chat>()
+                .HasMany(c => c.Messages)
+                .WithOne(m => m.Chat)
+                .HasForeignKey(m => m.ChatId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Contact>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Contacts)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<GroupMembership>()
                 .HasOne(gm => gm.User)
@@ -38,49 +66,30 @@ namespace StormBackend.Data
                 .HasForeignKey(gm => gm.GroupId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Chat>()
-                .HasOne(c => c.User1)
-                .WithMany()
-                .HasForeignKey(c => c.User1Id)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            modelBuilder.Entity<Chat>()
-                .HasOne(c => c.User2)
-                .WithMany()
-                .HasForeignKey(c => c.User2Id)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            modelBuilder.Entity<Chat>()
-                .HasMany(c => c.Messages)
-                .WithOne(m => m.Chat)
-                .HasForeignKey(m => m.ChatId);
-            
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
                 .HasForeignKey(m => m.ChatId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Group)
                 .WithMany(g => g.Messages)
                 .HasForeignKey(m => m.GroupId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            modelBuilder.Entity<Message>()
-                .OwnsMany(m => m.Reactions);
+                .OnDelete(DeleteBehavior.Restrict);   
 
-            modelBuilder.Entity<Contact>()
-                .HasOne(c => c.User)
-                .WithMany(u => u.Contacts)
-                .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            modelBuilder.Entity<Contact>()
-                .HasOne(c => c.ContactUser)
-                .WithMany()
-                .HasForeignKey(c => c.ContactUserId)
-                .OnDelete(DeleteBehavior.SetNull);             
+            modelBuilder.Entity<Message>()
+                .HasMany(m => m.Reactions)
+                .WithOne(r => r.Message)
+                .HasForeignKey(r => r.MessageId)
+                .OnDelete(DeleteBehavior.Cascade); // Cascade delete reactions if message is deleted
+
+            modelBuilder.Entity<EmojiReaction>()
+                .HasOne(r => r.Message)
+                .WithMany(m => m.Reactions)
+                .HasForeignKey(r => r.MessageId)
+                .OnDelete(DeleteBehavior.Cascade); // Cascade delete reactions if message is deleted
+             
         }
     }
 }

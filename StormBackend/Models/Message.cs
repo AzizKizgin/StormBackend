@@ -8,7 +8,7 @@ namespace StormBackend.Models
     public class Message
     {
         public int Id { get; set; }
-        public string SenderId { get; set; }
+        public string?  SenderId { get; set; }
         public User Sender { get; set; }
         public int? ChatId { get; set; } // Nullable for group messages
         public Chat Chat { get; set; }
@@ -23,7 +23,11 @@ namespace StormBackend.Models
 
     public class EmojiReaction
     {
+        public int Id { get; set; }
         public string UserId { get; set; }
+        public User User { get; set; }
         public string Emoji { get; set; }
+        public int MessageId { get; set; }
+        public Message Message { get; set; }
     }
 }
