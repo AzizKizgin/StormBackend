@@ -31,9 +31,21 @@ namespace StormBackend.Repository
         public async Task<User> GetUserAsync(string userId, bool trackChanges) =>
             await FindByCondition(u => u.Id.Equals(userId), trackChanges).SingleOrDefaultAsync();
 
+        public Task<User> GetUserByEmailAsync(string email, bool trackChanges)
+        {
+            return FindByCondition(u => u.Email.Equals(email), trackChanges).SingleOrDefaultAsync();
+        }
+
+        public async Task<SignInResult> Login(string email, string password)
+        {
+            var user = await GetUserByEmailAsync(email, false);
+            var result = await _userManager.CheckPasswordAsync(user, password);
+            return result ? SignInResult.Success : SignInResult.Failed;
+        }
+
         public async Task<IdentityResult> UpdateUser(User user)
         {
             return await _userManager.UpdateAsync(user);
-        }
+        }    
     }
 }
