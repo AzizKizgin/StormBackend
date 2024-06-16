@@ -24,7 +24,7 @@ namespace StormBackend.Extensions
             var connectionString = DotNetEnv.Env.GetString("CONNECTION_STRING");
             services.AddDbContext<AppDBContext>(
                 options => options.UseSqlServer(
-                    configuration.GetConnectionString("sqlConnection"), 
+                    connectionString, 
                     a => a.CommandTimeout(180)));
         }
 
