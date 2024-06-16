@@ -10,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StormBackend.Data;
 using StormBackend.Models;
+using StormBackend.Repository;
+using StormBackend.Repository.Contacts;
 using StormBackend.Services;
 using StormBackend.Services.Contacts;
 
@@ -100,11 +102,17 @@ namespace StormBackend.Extensions
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
+        public static void ConfigureRepositoryManager(this IServiceCollection services) => 
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+        // public static void ConfigureServiceManager(this IServiceCollection services) =>
+        //     services.AddScoped<IServiceManager, ServiceManager>();
         public static void ConfigureServices(this IServiceCollection services){
             services.AddScoped<ITokenService, TokenService>();
+          
         }
         public static void ConfigureRepositories(this IServiceCollection services){
-   
+            services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }
