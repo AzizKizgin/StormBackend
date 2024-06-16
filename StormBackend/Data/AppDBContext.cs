@@ -40,15 +40,20 @@ namespace StormBackend.Data
 
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.User1)
-                .WithMany(u => u.Chats)
+                .WithMany()
                 .HasForeignKey(c => c.User1Id)
                 .OnDelete(DeleteBehavior.SetNull);
             
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.User2)
-                .WithMany(u => u.Chats)
+                .WithMany()
                 .HasForeignKey(c => c.User2Id)
                 .OnDelete(DeleteBehavior.SetNull);
+            
+            modelBuilder.Entity<Chat>()
+                .HasMany(c => c.Messages)
+                .WithOne(m => m.Chat)
+                .HasForeignKey(m => m.ChatId);
             
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Chat)
