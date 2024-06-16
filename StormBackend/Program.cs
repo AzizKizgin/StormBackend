@@ -15,8 +15,8 @@ builder.Services.ConfigureControllers();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureRepositoryManager();
-
-// builder.Services.ConfigureServiceManager();
+builder.Services.ConfigureServiceManager();
+builder.Services.AddAutoMapper(typeof(Program));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
