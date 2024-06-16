@@ -113,7 +113,7 @@ namespace StormBackend.Services
             {
                 throw new Exception("User not found");
             }
-            user.Username = updateUsernameInfo.Username;
+            user.Name = updateUsernameInfo.Name;
             var result = _manager.User.UpdateUser(user);
             if (!result.Result.Succeeded)
             {

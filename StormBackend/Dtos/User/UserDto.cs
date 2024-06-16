@@ -9,7 +9,7 @@ namespace StormBackend.Dtos.User
     {
         public string Id { get; init; }
         public string Email { get; init; }
-        public string Username { get; init; }
+        public string Name { get; init; }
         public string About { get; init; }
         public DateTime CreatedAt { get; init; }
         public string ProfilePicture { get; init; }

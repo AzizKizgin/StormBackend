@@ -8,7 +8,7 @@ namespace StormBackend.Models
 {
     public class User: IdentityUser
     {
-        public string Username { get; set; }
+        public string Name { get; set; }
         public DateTime CreatedAt { get; set; }
         public byte[] ProfilePicture { get; set; }
         public string About { get; set; }
