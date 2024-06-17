@@ -15,11 +15,13 @@ namespace StormBackend.Services
     {
         private readonly IRepositoryManager _manager;
         private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
 
-        public UserManager(IRepositoryManager manager, IMapper mapper)
+        public UserManager(IRepositoryManager manager, IMapper mapper, ITokenService tokenService)
         {
             _manager = manager;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
         public async Task DeleteUser(string id)
@@ -48,19 +50,21 @@ namespace StormBackend.Services
             }
             return _mapper.Map<UserDto>(user);
         }
-        public async Task<SignInResult> Login(LoginDto loginInfo)
+        public async Task<UserDto> Login(LoginDto loginInfo)
         {
             var user = await _manager.User.GetUserByEmailAsync(loginInfo.Email, false);
-            if (user != null)
+            if (user == null)
             {
-                throw new Exception("User with this email does exist");
+                throw new Exception("User not found");
             }
             var result = await _manager.User.Login(loginInfo.Email, loginInfo.Password);
-            if (result == SignInResult.Failed)
+            if (!result.Succeeded)
             {
                 throw new Exception("Failed to login user");
             }
-            return result;
+            var userDto = _mapper.Map<UserDto>(user);
+            userDto.Token = await GenerateToken(user);
+            return userDto;
         }
 
         public async Task<IdentityResult> Register(RegisterDto registerInfo)
@@ -113,13 +117,19 @@ namespace StormBackend.Services
             {
                 throw new Exception("User not found");
             }
-            user.Name = updateUsernameInfo.Name;
+            user.UserName = updateUsernameInfo.Username;
             var result = _manager.User.UpdateUser(user);
             if (!result.Result.Succeeded)
             {
                 throw new Exception("Failed to update username");
             }
             await _manager.SaveAsync();
+        }
+
+        public Task<string> GenerateToken(User user)
+        {
+            var token = _tokenService.GenerateToken(user);
+            return Task.FromResult(token);
         }
     }
 }
