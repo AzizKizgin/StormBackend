@@ -131,5 +131,19 @@ namespace StormBackend.Services
             var token = _tokenService.GenerateToken(user);
             return Task.FromResult(token);
         }
+
+        public async Task ChangePassword(string id, ChangePasswordDto changePasswordInfo)
+        {
+            var user = await _manager.User.GetUserAsync(id, false);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            var result =  await _manager.User.ChangePassword(user, changePasswordInfo.OldPassword, changePasswordInfo.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to change password");
+            }
+        }
     }
 }

@@ -19,5 +19,6 @@ namespace StormBackend.Services.Contacts
         Task UpdateUserAbout(string id, UpdateUserAboutDto updateUserAboutInfo,bool trackChanges);
         Task DeleteUser(string id);
         Task<string> GenerateToken(User user);
+        Task ChangePassword(string id, ChangePasswordDto changePasswordInfo);
     }
 }

@@ -18,6 +18,11 @@ namespace StormBackend.Repository
             _userManager = userManager;
         }
 
+        public Task<IdentityResult> ChangePassword(User user, string oldPassword, string newPassword)
+        {
+            return _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+        }
+
         public async Task<IdentityResult> CreateUser(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);
