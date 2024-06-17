@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StormBackend.Dtos.User;
 using StormBackend.Services.Contacts;
@@ -59,6 +60,7 @@ namespace StormBackend.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("update-username/{id}")]
         public async Task<IActionResult> UpdateUsername(string id, [FromBody] UpdateUsernameDto updateUsernameDto)
         {
@@ -68,7 +70,7 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Invalid model object");
                 }
-                await _userService.UpdateUsername(id, updateUsernameDto, false);
+                await _userService.UpdateUsername(id, updateUsernameDto, true);
                 return Ok("Username updated successfully");
             }
             catch (Exception e)
@@ -77,6 +79,7 @@ namespace StormBackend.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("update-profile-picture/{id}")]
         public async Task<IActionResult> UpdateProfilePicture(string id, [FromBody] UpdateProfilePictureDto updateProfilePictureDto)
         {
@@ -86,7 +89,7 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Invalid model object");
                 }
-                await _userService.UpdateProfilePicture(id, updateProfilePictureDto, false);
+                await _userService.UpdateProfilePicture(id, updateProfilePictureDto, true);
                 return Ok("Profile picture updated successfully");
             }
             catch (Exception e)
@@ -95,6 +98,7 @@ namespace StormBackend.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("update-user-about/{id}")]
         public async Task<IActionResult> UpdateUserAbout(string id, [FromBody] UpdateUserAboutDto updateUserAboutDto)
         {
@@ -104,7 +108,7 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Invalid model object");
                 }
-                await _userService.UpdateUserAbout(id, updateUserAboutDto, false);
+                await _userService.UpdateUserAbout(id, updateUserAboutDto, true);
                 return Ok("User about updated successfully");
             }
             catch (Exception e)
@@ -113,6 +117,7 @@ namespace StormBackend.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("delete-user/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
