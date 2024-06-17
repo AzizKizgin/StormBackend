@@ -8,10 +8,9 @@ namespace StormBackend.Models
 {
     public class User: IdentityUser
     {
-        public string Name { get; set; }
         public DateTime CreatedAt { get; set; }
-        public byte[] ProfilePicture { get; set; }
-        public string About { get; set; }
+        public byte[]? ProfilePicture { get; set; } 
+        public string About { get; set; } = "Hey there! I am using Storm";
         public List<Chat> Chats { get; set; }
         public List<GroupMembership> GroupMemberships { get; set; }
         public List<Contact> Contacts { get; set; }
