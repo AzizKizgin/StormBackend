@@ -13,10 +13,8 @@ namespace StormBackend.Utilities
         public MappingProfile()
         {
             CreateMap<User, UserDto>();
-            CreateMap<RegisterDto, User>();
-            CreateMap<UpdateProfilePictureDto, User>();
-            CreateMap<UpdateUserAboutDto, User>();
-            CreateMap<UpdateUsernameDto, User>();
+            CreateMap<RegisterDto, User>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username));
         }
     }
 }
