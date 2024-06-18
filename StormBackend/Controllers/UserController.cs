@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,8 +62,8 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
-        [HttpPut("update-username/{id}")]
-        public async Task<IActionResult> UpdateUsername(string id, [FromBody] UpdateUsernameDto updateUsernameDto)
+        [HttpPut("update-username")]
+        public async Task<IActionResult> UpdateUsername([FromBody] UpdateUsernameDto updateUsernameDto)
         {
             try
             {
@@ -70,7 +71,12 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Invalid model object");
                 }
-                await _userService.UpdateUsername(id, updateUsernameDto, true);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _userService.UpdateUsername(userId, updateUsernameDto, true);
                 return Ok("Username updated successfully");
             }
             catch (Exception e)
@@ -80,8 +86,8 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
-        [HttpPut("update-profile-picture/{id}")]
-        public async Task<IActionResult> UpdateProfilePicture(string id, [FromBody] UpdateProfilePictureDto updateProfilePictureDto)
+        [HttpPut("update-profile-picture")]
+        public async Task<IActionResult> UpdateProfilePicture([FromBody] UpdateProfilePictureDto updateProfilePictureDto)
         {
             try
             {
@@ -89,7 +95,12 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Invalid model object");
                 }
-                await _userService.UpdateProfilePicture(id, updateProfilePictureDto, true);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _userService.UpdateProfilePicture(userId, updateProfilePictureDto, true);
                 return Ok("Profile picture updated successfully");
             }
             catch (Exception e)
@@ -99,8 +110,8 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
-        [HttpPut("update-user-about/{id}")]
-        public async Task<IActionResult> UpdateUserAbout(string id, [FromBody] UpdateUserAboutDto updateUserAboutDto)
+        [HttpPut("update-user-about")]
+        public async Task<IActionResult> UpdateUserAbout([FromBody] UpdateUserAboutDto updateUserAboutDto)
         {
             try
             {
@@ -108,7 +119,12 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Invalid model object");
                 }
-                await _userService.UpdateUserAbout(id, updateUserAboutDto, true);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _userService.UpdateUserAbout(userId, updateUserAboutDto, true);
                 return Ok("User about updated successfully");
             }
             catch (Exception e)
@@ -118,12 +134,17 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
-        [HttpDelete("delete-user/{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        [HttpDelete("delete-user")]
+        public async Task<IActionResult> DeleteUser()
         {
             try
             {
-                await _userService.DeleteUser(id);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _userService.DeleteUser(userId);
                 return Ok("User deleted successfully");
             }
             catch (Exception e)
