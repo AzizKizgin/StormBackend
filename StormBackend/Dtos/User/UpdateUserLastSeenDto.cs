@@ -7,6 +7,6 @@ namespace StormBackend.Dtos.User
 {
     public class UpdateUserLastSeenDto
     {
-        public DateTime LastSeen { get; set; } = DateTime.Now;
+        public DateTime LastSeen { get; set; }
     }
 }
