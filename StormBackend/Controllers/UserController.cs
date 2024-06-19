@@ -62,6 +62,42 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                await _userService.Logout();
+                return Ok("User logged out successfully");
+            }
+            catch 
+            {
+                return BadRequest("Failed to logout user");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("get-user")]
+        public async Task<IActionResult> GetUser()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                var user = await _userService.GetUserById(userId, false);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
+
+        [Authorize]
         [HttpPut("update-username")]
         public async Task<IActionResult> UpdateUsername([FromBody] UpdateUsernameDto updateUsernameDto)
         {

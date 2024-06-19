@@ -13,11 +13,13 @@ namespace StormBackend.Repository
     public class UserRepository: RepositoryBase<User>, IUserRepository
     {
         private readonly UserManager<User> _userManager;
-        public UserRepository(AppDBContext context, UserManager<User> userManager): base(context)
+        private readonly SignInManager<User> _signInManager;
+
+        public UserRepository(AppDBContext context, UserManager<User> userManager, SignInManager<User> signInManager) : base(context)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
-
         public Task<IdentityResult> ChangePassword(User user, string oldPassword, string newPassword)
         {
             return _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
@@ -44,8 +46,13 @@ namespace StormBackend.Repository
         public async Task<SignInResult> Login(string email, string password)
         {
             var user = await GetUserByEmailAsync(email, false);
-            var result = await _userManager.CheckPasswordAsync(user, password);
-            return result ? SignInResult.Success : SignInResult.Failed;
+            var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+            return result;
+        }
+
+        public async Task Logout()
+        {
+            await _signInManager.SignOutAsync();
         }
 
         public async Task<IdentityResult> UpdateUser(User user)

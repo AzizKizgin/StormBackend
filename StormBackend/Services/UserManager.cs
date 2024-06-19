@@ -145,5 +145,10 @@ namespace StormBackend.Services
                 throw new Exception("Failed to change password");
             }
         }
+
+        public async Task Logout()
+        {
+            await _manager.User.Logout();
+        }
     }
 }

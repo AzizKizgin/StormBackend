@@ -15,6 +15,7 @@ namespace StormBackend.Repository.Contacts
         Task<IdentityResult> DeleteUser(User user);
         Task<IdentityResult> UpdateUser(User user);
         Task<SignInResult> Login(string email, string password);
+        Task Logout();
         Task<IdentityResult> ChangePassword(User user, string oldPassword, string newPassword);
     }
 }
