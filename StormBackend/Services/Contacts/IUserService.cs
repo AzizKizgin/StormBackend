@@ -18,6 +18,7 @@ namespace StormBackend.Services.Contacts
         Task UpdateUsername(string id, UpdateUsernameDto updateUsernameInfo,bool trackChanges);
         Task UpdateProfilePicture(string id, UpdateProfilePictureDto updateProfilePictureInfo,bool trackChanges);
         Task UpdateUserAbout(string id, UpdateUserAboutDto updateUserAboutInfo,bool trackChanges);
+        Task UpdateUserLastSeen(string id, UpdateUserLastSeenDto updateUserLastSeenInfo,bool trackChanges);
         Task DeleteUser(string id);
         Task<string> GenerateToken(User user);
         Task ChangePassword(string id, ChangePasswordDto changePasswordInfo);

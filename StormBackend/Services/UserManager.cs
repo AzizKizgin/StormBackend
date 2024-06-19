@@ -150,5 +150,21 @@ namespace StormBackend.Services
         {
             await _manager.User.Logout();
         }
+
+        public async Task UpdateUserLastSeen(string id, UpdateUserLastSeenDto updateUserLastSeenInfo, bool trackChanges)
+        {
+            var user = await _manager.User.GetUserAsync(id, trackChanges);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            user.LastSeen = updateUserLastSeenInfo.LastSeen;
+            var result = await _manager.User.UpdateUser(user);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to update last seen");
+            }
+            await _manager.SaveAsync();
+        }
     }
 }

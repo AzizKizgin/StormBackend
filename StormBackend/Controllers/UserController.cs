@@ -188,5 +188,29 @@ namespace StormBackend.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize]
+        [HttpPut("update-user-last-seen")]
+        public async Task<IActionResult> UpdateUserLastSeen([FromBody] UpdateUserLastSeenDto updateUserLastSeenDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _userService.UpdateUserLastSeen(userId, updateUserLastSeenDto, true);
+                return Ok("User last seen updated successfully");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
