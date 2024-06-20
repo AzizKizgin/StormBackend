@@ -48,6 +48,12 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Invalid model object");
                 }
+
+                if (registerDto.Password != registerDto.ConfirmPassword)
+                {
+                    return BadRequest("Passwords do not match");
+                }
+                
                 var result = await _userService.Register(registerDto);
                 if (!result.Succeeded)
                 {
