@@ -54,17 +54,12 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Passwords do not match");
                 }
-                
                 var result = await _userService.Register(registerDto);
-                if (!result.Succeeded)
+                if (result == null)
                 {
-                    return BadRequest(result.Errors);
+                    return BadRequest("Failed to register user");
                 }
-                var successMessage = new SuccessMessage
-                {
-                    Message = "User registered successfully"
-                };
-                return Ok(successMessage);
+                return Ok(result);
             }
             catch (Exception e)
             {

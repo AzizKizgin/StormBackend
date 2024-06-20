@@ -67,7 +67,7 @@ namespace StormBackend.Services
             return userDto;
         }
 
-        public async Task<IdentityResult> Register(RegisterDto registerInfo)
+        public async Task<UserDto> Register(RegisterDto registerInfo)
         {
             var user = _mapper.Map<User>(registerInfo);
             var result = await _manager.User.CreateUser(user, registerInfo.Password);
@@ -75,7 +75,9 @@ namespace StormBackend.Services
             {
                 throw new Exception(result.Errors.First().Description);
             }
-            return result;
+            var userDto = _mapper.Map<UserDto>(user);
+            userDto.Token = await GenerateToken(user);
+            return userDto;
         }
 
         public async Task UpdateProfilePicture(string id, UpdateProfilePictureDto updateProfilePictureInfo, bool trackChanges)

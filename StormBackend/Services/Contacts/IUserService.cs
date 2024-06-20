@@ -14,7 +14,7 @@ namespace StormBackend.Services.Contacts
         Task<UserDto> GetUserByEmail(string email, bool trackChanges);
         Task<UserDto> Login(LoginDto loginInfo);
         Task Logout();
-        Task<IdentityResult> Register(RegisterDto registerInfo);
+        Task<UserDto> Register(RegisterDto registerInfo);
         Task UpdateUsername(string id, UpdateUsernameDto updateUsernameInfo,bool trackChanges);
         Task UpdateProfilePicture(string id, UpdateProfilePictureDto updateProfilePictureInfo,bool trackChanges);
         Task UpdateUserAbout(string id, UpdateUserAboutDto updateUserAboutInfo,bool trackChanges);
