@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StormBackend.Dtos;
 using StormBackend.Dtos.User;
 using StormBackend.Services.Contacts;
 
@@ -59,7 +60,11 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest(result.Errors);
                 }
-                return Ok("User registered successfully");
+                var successMessage = new SuccessMessage
+                {
+                    Message = "User registered successfully"
+                };
+                return Ok(successMessage);
             }
             catch (Exception e)
             {
@@ -74,7 +79,11 @@ namespace StormBackend.Controllers
             try
             {
                 await _userService.Logout();
-                return Ok("User logged out successfully");
+                var successMessage = new SuccessMessage
+                {
+                    Message = "User logged out successfully"
+                };
+                return Ok(successMessage);
             }
             catch 
             {
@@ -119,7 +128,11 @@ namespace StormBackend.Controllers
                     return BadRequest("User not found");
                 }
                 await _userService.UpdateUsername(userId, updateUsernameDto, true);
-                return Ok("Username updated successfully");
+                var successMessage = new SuccessMessage
+                {
+                    Message = "Username updated successfully"
+                };
+                return Ok(successMessage);
             }
             catch (Exception e)
             {
@@ -143,7 +156,11 @@ namespace StormBackend.Controllers
                     return BadRequest("User not found");
                 }
                 await _userService.UpdateProfilePicture(userId, updateProfilePictureDto, true);
-                return Ok("Profile picture updated successfully");
+                var successMessage = new SuccessMessage
+                {
+                    Message = "Profile picture updated successfully"
+                };
+                return Ok(successMessage);
             }
             catch (Exception e)
             {
@@ -167,7 +184,11 @@ namespace StormBackend.Controllers
                     return BadRequest("User not found");
                 }
                 await _userService.UpdateUserAbout(userId, updateUserAboutDto, true);
-                return Ok("User about updated successfully");
+                var successMessage = new SuccessMessage
+                {
+                    Message = "User about updated successfully"
+                };
+                return Ok(successMessage);
             }
             catch (Exception e)
             {
@@ -187,7 +208,11 @@ namespace StormBackend.Controllers
                     return BadRequest("User not found");
                 }
                 await _userService.DeleteUser(userId);
-                return Ok("User deleted successfully");
+                var successMessage = new SuccessMessage
+                {
+                    Message = "User deleted successfully"
+                };
+                return Ok(successMessage);
             }
             catch (Exception e)
             {
@@ -211,7 +236,7 @@ namespace StormBackend.Controllers
                     return BadRequest("User not found");
                 }
                 await _userService.UpdateUserLastSeen(userId, updateUserLastSeenDto, true);
-                return Ok("User last seen updated successfully");
+                return Ok();
             }
             catch (Exception e)
             {
