@@ -60,7 +60,7 @@ namespace StormBackend.Services
             var result = await _manager.User.Login(loginInfo.Email, loginInfo.Password);
             if (!result.Succeeded)
             {
-                throw new Exception("Failed to login user");
+                throw new Exception("Your email or password is incorrect");
             }
             var userDto = _mapper.Map<UserDto>(user);
             userDto.Token = await GenerateToken(user);
