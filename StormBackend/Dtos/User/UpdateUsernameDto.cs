@@ -10,7 +10,7 @@ namespace StormBackend.Dtos.User
     {
         [Required (ErrorMessage = "Username is required")]
         [MinLength(1, ErrorMessage = "Username must not be empty")]
-        [MaxLength(20, ErrorMessage = "Username must not be longer than 20 characters")]
+        [MaxLength(25, ErrorMessage = "Username must not be longer than 25 characters")]
         public string Username { get; init; }
     }
 }
