@@ -168,5 +168,18 @@ namespace StormBackend.Services
             }
             await _manager.SaveAsync();
         }
+
+        public async Task<SearchUserDto> SearchUsers(SearchUsersQuery query, bool trackChanges)
+        {
+            var searchUsersResult = await _manager.User.SearchUsers(query, trackChanges);
+            var searchUsers = new SearchUserDto
+            {
+                Users = _mapper.Map<List<UserDto>>(searchUsersResult.Users),
+                Page = searchUsersResult.Page,
+                PageSize = searchUsersResult.PageSize,
+                TotalPages = searchUsersResult.TotalPages
+            };
+            return searchUsers;
+        }
     }
 }

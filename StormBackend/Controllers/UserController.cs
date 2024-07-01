@@ -238,5 +238,24 @@ namespace StormBackend.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize]
+        [HttpGet("search-users")]
+        public async Task<IActionResult> SearchUsers([FromQuery] SearchUsersQuery searchUsersDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var users = await _userService.SearchUsers(searchUsersDto, true);
+                return Ok(users);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

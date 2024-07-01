@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StormBackend.Data;
+using StormBackend.Dtos.User;
 using StormBackend.Models;
 using StormBackend.Repository.Contacts;
 
@@ -53,6 +54,23 @@ namespace StormBackend.Repository
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<SearchUsersResult> SearchUsers(SearchUsersQuery query, bool trackChanges)
+        {
+            var users = FindAll(trackChanges)
+                .Where(u => u.UserName.ToLower().Contains(query.Username.ToLower()))
+                .Skip((query.Page - 1) * query.PageSize)
+                .Take(query.PageSize);
+
+            var result = new SearchUsersResult
+            {
+                Users = users.ToList(),
+                Page = query.Page,
+                PageSize = query.PageSize,
+                TotalPages = (int)Math.Ceiling(await FindAll(trackChanges).CountAsync() / (double)query.PageSize)
+            };
+            return result;
         }
 
         public async Task<IdentityResult> UpdateUser(User user)

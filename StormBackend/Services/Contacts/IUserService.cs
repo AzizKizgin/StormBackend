@@ -22,5 +22,6 @@ namespace StormBackend.Services.Contacts
         Task DeleteUser(string id);
         Task<string> GenerateToken(User user);
         Task ChangePassword(string id, ChangePasswordDto changePasswordInfo);
+        Task<SearchUserDto> SearchUsers(SearchUsersQuery query, bool trackChanges);
     }
 }
