@@ -8,6 +8,7 @@ namespace StormBackend.Repository.Contacts
     public interface IRepositoryManager
     {
         IUserRepository User { get; }
+        IContactRepository Contact { get; }
         Task SaveAsync();
     }
 }

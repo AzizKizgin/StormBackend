@@ -12,14 +12,18 @@ namespace StormBackend.Repository
 
         private readonly AppDBContext _context;
         private readonly IUserRepository _user;
+        private readonly IContactRepository _contact;
 
-        public RepositoryManager(AppDBContext context, IUserRepository user)
+        public RepositoryManager(AppDBContext context, IUserRepository user, IContactRepository contact)
         {
             _context = context;
             _user = user;
+            _contact = contact;
         }
 
         public IUserRepository User => _user;
+
+        public IContactRepository Contact => _contact;
 
         public async Task SaveAsync()
         {
