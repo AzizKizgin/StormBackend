@@ -8,5 +8,6 @@ namespace StormBackend.Services.Contacts
     public interface IServiceManager
     {
         IUserService UserService { get; }
+        IContactService ContactService { get; }
     }
 }
