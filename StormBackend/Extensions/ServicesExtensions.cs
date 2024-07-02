@@ -112,9 +112,11 @@ namespace StormBackend.Extensions
         public static void ConfigureServices(this IServiceCollection services){
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserManager>();
+            services.AddScoped<IContactService, ContactManager>();
         }
         public static void ConfigureRepositories(this IServiceCollection services){
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
         }
     }
 }
