@@ -12,6 +12,7 @@ namespace StormBackend.Repository.Contacts
     {
         Task<User> GetUserAsync(string userId, bool trackChanges);
         Task<User> GetUserByEmailAsync(string email, bool trackChanges);
+        Task<User> GetUserByUsernameAsync(string username, bool trackChanges);
         Task<IdentityResult> CreateUser(User user, string password);
         Task<IdentityResult> DeleteUser(User user);
         Task<IdentityResult> UpdateUser(User user);

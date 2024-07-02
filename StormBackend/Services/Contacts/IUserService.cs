@@ -12,6 +12,7 @@ namespace StormBackend.Services.Contacts
     {
         Task<UserDto> GetUserById(string id, bool trackChanges);
         Task<UserDto> GetUserByEmail(string email, bool trackChanges);
+        Task<UserDto> GetUserByUsername(string username, bool trackChanges);
         Task<UserDto> Login(LoginDto loginInfo);
         Task Logout();
         Task<UserDto> Register(RegisterDto registerInfo);

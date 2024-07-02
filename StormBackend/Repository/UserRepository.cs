@@ -44,6 +44,12 @@ namespace StormBackend.Repository
             return FindByCondition(u => u.Email.Equals(email), trackChanges).SingleOrDefaultAsync();
         }
 
+        public async Task<User> GetUserByUsernameAsync(string username, bool trackChanges)
+        {
+            var user = await FindByCondition(u => u.UserName.Equals(username), trackChanges).SingleOrDefaultAsync();
+            return user;
+        }
+
         public async Task<SignInResult> Login(string email, string password)
         {
             var user = await GetUserByEmailAsync(email, false);

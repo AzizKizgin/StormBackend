@@ -181,5 +181,15 @@ namespace StormBackend.Services
             };
             return searchUsers;
         }
+
+        public async Task<UserDto> GetUserByUsername(string username, bool trackChanges)
+        {
+            var user = await _manager.User.GetUserByUsernameAsync(username, trackChanges);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            return _mapper.Map<UserDto>(user);
+        }
     }
 }
