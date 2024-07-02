@@ -13,7 +13,7 @@ namespace StormBackend.Models
         public string?  ContactUserId { get; set; }
         public User ContactUser { get; set; }
         public DateTime AddedAt { get; set; }
-        public DateTime BlockedAt { get; set; }
+        public DateTime? BlockedAt { get; set; }
         public bool IsBlocked { get; set; }
         public bool IsMuted { get; set; }
         public bool IsAccepted { get; set; }
