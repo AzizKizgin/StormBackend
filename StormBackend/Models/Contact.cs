@@ -14,8 +14,8 @@ namespace StormBackend.Models
         public User ContactUser { get; set; }
         public DateTime AddedAt { get; set; }
         public DateTime? BlockedAt { get; set; }
-        public bool IsBlocked { get; set; }
-        public bool IsMuted { get; set; }
-        public bool IsAccepted { get; set; }
+        public bool IsBlocked { get; set; } = false;
+        public bool IsMuted { get; set; } = false;
+        public bool IsAccepted { get; set; } = false;
     }
 }
