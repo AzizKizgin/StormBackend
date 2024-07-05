@@ -12,6 +12,7 @@ namespace StormBackend.Services.Contacts
         Task AcceptContact(string userId, int contactId);
         Task BlockContact(string userId, int contactId);
         Task MuteContact(string userId, int contactId);
+        Task DeleteContact(string userId, int contactId);
         Task<List<ContactDto>> GetContacts(string userId, SearchContactsQuery query);
         Task<ContactDto> GetContact(string userId, string contactUserId);
     }

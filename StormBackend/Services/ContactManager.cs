@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using StormBackend.Dtos.Contact;
+using StormBackend.Models;
 using StormBackend.Repository.Contacts;
 using StormBackend.Services.Contacts;
 
@@ -22,74 +23,121 @@ namespace StormBackend.Services
             _tokenService = tokenService;
         }
 
-        public Task AcceptContact(string userId, int contactId)
+        public async Task AcceptContact(string userId, int contactId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task BlockContact(string userId, int contactId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task CreateContact(string userId, CreateContactDto createContactInfo)
-        {
-            var existingContact = await _manager.Contact.GetContactAsync(createContactInfo.ContactUserName, false);
-            if (existingContact != null)
+            var contact = await _manager.Contact.GetContactByIdAsync(contactId, false);
+            if (contact == null)
             {
-                throw new InvalidOperationException("Contact already exists");
+                throw new Exception("Contact not found");
             }
-            var contactUser = await _manager.User.GetUserByUsernameAsync(createContactInfo.ContactUserName, false);
-            var contact = new Models.Contact {
-                AddedAt = DateTime.Now,
-                IsAccepted = false,
-                ContactUserId = contactUser.Id,
-                UserId = userId,
-                IsBlocked = false,
-                IsMuted = false,
-            };
-            _manager.Contact.CreateContact(contact);
+            if (contact.UserId != userId)
+            {
+                throw new Exception("Unauthorized");
+            }
+            contact.IsAccepted = true;
+            _manager.Contact.UpdateContact(contact);
 
-            var contactUserContact = new Models.Contact {
-                AddedAt = DateTime.Now,
-                IsAccepted = false,
-                ContactUserId = userId,
-                UserId = contactUser.Id,
-                IsBlocked = false,
-                IsMuted = false,
-            };
-            _manager.Contact.CreateContact(contactUserContact);
+            var contactUserContact = await _manager.Contact.GetContactAsync(contact.ContactUserId, userId, false);
+            if (contactUserContact != null)
+            {
+                contactUserContact.IsAccepted = true;
+                _manager.Contact.UpdateContact(contactUserContact);
+            }
             await _manager.SaveAsync();
         }
 
-        public async Task<ContactDto> GetContact(string userId, int contactId)
+        public async Task BlockContact(string userId, int contactId)
         {
-            var contact = await _manager.Contact.GetContactAsync(contactId, false);
-            if (contact.UserId != userId && contact.ContactUserId != userId)
+            var contact = await _manager.Contact.GetContactByIdAsync(contactId, false);
+            if (contact == null)
             {
-                throw new UnauthorizedAccessException();
+                throw new Exception("Contact not found");
             }
+            if (contact.UserId != userId)
+            {
+                throw new Exception("Unauthorized");
+            }
+            contact.IsBlocked = true;
+            _manager.Contact.UpdateContact(contact);
+            await _manager.SaveAsync();
+        }
+
+        public async Task CreateContact(string userId, string contactUserId)
+        {
+            var existingContact = await _manager.Contact.GetContactAsync(userId, contactUserId, false);
+            if (existingContact != null)
+            {
+                throw new Exception("Contact already exists");
+            }
+            var contactUserContact = await _manager.Contact.GetContactAsync(contactUserId, userId, false);
+            
+            var contact = new Contact
+            {
+                UserId = userId,
+                ContactUserId = contactUserId,
+                IsAccepted = contactUserContact != null,
+                IsBlocked = false,
+                IsMuted = false,
+                AddedAt = DateTime.Now,
+            };
+            _manager.Contact.CreateContact(contact);
+            
+            if (contactUserContact != null)
+            {
+                contactUserContact.IsAccepted = true;
+                _manager.Contact.UpdateContact(contactUserContact);
+            }
+            await _manager.SaveAsync();
+        }
+
+        public async Task<ContactDto> GetContact(string userId, string contactUserId)
+        {
+            var contact = await _manager.Contact.GetContactAsync(userId, contactUserId, false);
             return _mapper.Map<ContactDto>(contact);
         }
 
-        public async Task<ContactDto> GetContact(string userId, string contactUserName)
+        public async Task<List<ContactDto>> GetContacts(string userId, SearchContactsQuery query)
         {
-            var contact = await _manager.Contact.GetContactAsync(contactUserName, false);
-            if (contact.UserId != userId && contact.ContactUserId != userId)
+            var contacts = await _manager.Contact.GetContactsAsync(userId, query, false);
+            return _mapper.Map<List<ContactDto>>(contacts);
+        }
+
+        public async Task MuteContact(string userId, int contactId)
+        {
+            var contact = await _manager.Contact.GetContactByIdAsync(contactId, false);
+            if (contact == null)
             {
-                throw new UnauthorizedAccessException();
+                throw new Exception("Contact not found");
             }
-            return _mapper.Map<ContactDto>(contact);
+            if (contact.UserId != userId)
+            {
+                throw new Exception("Unauthorized");
+            }
+            contact.IsMuted = true;
+            _manager.Contact.UpdateContact(contact);
+            await _manager.SaveAsync();
         }
 
-        public Task<List<ContactDto>> GetContacts(string userId, GetContactsQuery query)
+        public async Task DeleteContact(string userId, int contactId)
         {
-            throw new NotImplementedException();
-        }
+            var contact = await _manager.Contact.GetContactByIdAsync(contactId, false);
+            if (contact == null)
+            {
+                throw new Exception("Contact not found");
+            }
+            if (contact.UserId != userId)
+            {
+                throw new Exception("Unauthorized");
+            }
+            _manager.Contact.DeleteContact(contact);
 
-        public Task MuteContact(string userId, int contactId)
-        {
-            throw new NotImplementedException();
+            var contactUserContact = await _manager.Contact.GetContactAsync(contact.ContactUserId, userId, false);
+            if (contactUserContact != null)
+            {
+                contactUserContact.IsAccepted = false;
+                _manager.Contact.UpdateContact(contactUserContact);
+            }
+            await _manager.SaveAsync();
         }
     }
 }
