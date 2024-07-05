@@ -7,8 +7,6 @@ namespace StormBackend.Dtos.Contact
 {
     public record CreateContactDto
     {
-        public string ContactUserName { get; init; }
-        public DateTime AddedAt { get; init; } = DateTime.Now;
-        public bool IsAccepted { get; init; } = false;
+        public string ContactUserId { get; init; }
     }
 }
