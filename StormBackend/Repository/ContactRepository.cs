@@ -26,43 +26,38 @@ namespace StormBackend.Repository
             Delete(contact);
         }
 
-        public async Task<Contact> GetContactAsync(int contactId, bool trackChanges)
+        public async Task<Contact> GetContactAsync(string userId, string contactUserId, bool trackChanges)
         {
-            var result = await FindByCondition(c => c.Id == contactId, trackChanges).SingleOrDefaultAsync();
+            var result = await FindByCondition(c => c.UserId == userId && c.ContactUserId == contactUserId,trackChanges).FirstOrDefaultAsync();
             return result;
         }
 
-        public Task<Contact> GetContactAsync(string contactUserName, bool trackChanges)
+        public Task<Contact> GetContactByIdAsync(int contactId, bool trackChanges)
         {
-            var result = FindByCondition(c => c.ContactUser.UserName == contactUserName, trackChanges).SingleOrDefaultAsync();
+            var result = FindByCondition(c => c.Id == contactId, trackChanges).FirstOrDefaultAsync();
             return result;
         }
 
-        public Task<List<Contact>> GetContactsAsync(GetContactsQuery query, bool trackChanges)
+        public Task<List<Contact>> GetContactsAsync(string userId, SearchContactsQuery query, bool trackChanges)
         {
-            var contacts = FindAll(trackChanges);
+            var contacts = FindAll(trackChanges).Where(c => c.UserId == userId);
 
-            if (!string.IsNullOrEmpty(query.UserId))
+            if (!string.IsNullOrEmpty(query.ContactUserName))
             {
-                contacts = contacts.Where(c => c.UserId == query.UserId);
+                contacts = contacts.Where(c => c.ContactUser.UserName == query.ContactUserName);
             }
 
-            if (!string.IsNullOrEmpty(query.ContactName))
-            {
-                contacts = contacts.Where(c => c.ContactUser.UserName == query.ContactName);
-            }
-
-            if (query.IsAccepted)
+            if (query.IsAccepted.HasValue && query.IsAccepted == true)
             {
                 contacts = contacts.Where(c => c.IsAccepted);
             }
 
-            if (query.IsBlocked)
+            if (query.IsBlocked.HasValue && query.IsBlocked == true)
             {
                 contacts = contacts.Where(c => c.IsBlocked);
             }
 
-            if (query.IsMuted)
+            if (query.IsMuted.HasValue && query.IsMuted == true)
             {
                 contacts = contacts.Where(c => c.IsMuted);
             }

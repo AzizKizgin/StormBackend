@@ -10,6 +10,7 @@ namespace StormBackend.Repository.Contacts
     public interface IContactRepository: IRepositoryBase<Contact>
     {
         Task<Contact> GetContactAsync(string userId, string contactUserId, bool trackChanges);
+        Task<Contact> GetContactByIdAsync(int contactId, bool trackChanges);
         Task<List<Contact>> GetContactsAsync(string userId, SearchContactsQuery query, bool trackChanges);
         void CreateContact(Contact contact);
         void UpdateContact(Contact contact);
