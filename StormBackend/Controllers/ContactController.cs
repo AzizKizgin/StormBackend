@@ -34,13 +34,173 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("User not found");
                 }
-                await _contactService.CreateContact(userId, createContactDto);
+                await _contactService.CreateContact(userId, createContactDto.ContactUserId);
                 
                 var message = new SuccessMessage
                 {
                     Message = "Contact created successfully"
                 };
 
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("api/contact/get-all")]
+        public async Task<IActionResult> GetContacts([FromBody] SearchContactsQuery query)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                var contacts = await _contactService.GetContacts(userId, query);
+                return Ok(contacts);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("api/contact/get")]
+        public async Task<IActionResult> GetContact([FromBody] CreateContactDto getContactDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                var contact = await _contactService.GetContact(userId, getContactDto.ContactUserId);
+                return Ok(contact);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("api/contact/accept")]
+        public async Task<IActionResult> AcceptContact([FromBody] DecideContactDto acceptContactDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _contactService.AcceptContact(userId, acceptContactDto.Id);
+                var message = new SuccessMessage
+                {
+                    Message = "Contact accepted successfully"
+                };
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("api/contact/block")]
+        public async Task<IActionResult> BlockContact([FromBody] DecideContactDto blockContactDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _contactService.BlockContact(userId, blockContactDto.Id);
+                var message = new SuccessMessage
+                {
+                    Message = "Contact blocked successfully"
+                };
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("api/contact/mute")]
+        public async Task<IActionResult> MuteContact([FromBody] DecideContactDto muteContactDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _contactService.MuteContact(userId, muteContactDto.Id);
+                var message = new SuccessMessage
+                {
+                    Message = "Contact muted successfully"
+                };
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("api/contact/delete")]
+        public async Task<IActionResult> DeleteContact([FromBody] DecideContactDto deleteContactDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _contactService.DeleteContact(userId, deleteContactDto.Id);
+                var message = new SuccessMessage
+                {
+                    Message = "Contact deleted successfully"
+                };
                 return Ok(message);
             }
             catch (Exception e)
