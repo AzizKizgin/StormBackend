@@ -23,45 +23,6 @@ namespace StormBackend.Services
             _tokenService = tokenService;
         }
 
-        public async Task AcceptContact(string userId, int contactId)
-        {
-            var contact = await _manager.Contact.GetContactByIdAsync(contactId, false);
-            if (contact == null)
-            {
-                throw new Exception("Contact not found");
-            }
-            if (contact.UserId != userId)
-            {
-                throw new Exception("Unauthorized");
-            }
-            contact.IsAccepted = true;
-            _manager.Contact.UpdateContact(contact);
-
-            var contactUserContact = await _manager.Contact.GetContactAsync(contact.ContactUserId, userId, false);
-            if (contactUserContact != null)
-            {
-                contactUserContact.IsAccepted = true;
-                _manager.Contact.UpdateContact(contactUserContact);
-            }
-            await _manager.SaveAsync();
-        }
-
-        public async Task BlockContact(string userId, int contactId)
-        {
-            var contact = await _manager.Contact.GetContactByIdAsync(contactId, false);
-            if (contact == null)
-            {
-                throw new Exception("Contact not found");
-            }
-            if (contact.UserId != userId)
-            {
-                throw new Exception("Unauthorized");
-            }
-            contact.IsBlocked = true;
-            _manager.Contact.UpdateContact(contact);
-            await _manager.SaveAsync();
-        }
-
         public async Task CreateContact(string userId, string contactUserId)
         {
             var existingContact = await _manager.Contact.GetContactAsync(userId, contactUserId, false);
@@ -69,24 +30,15 @@ namespace StormBackend.Services
             {
                 throw new Exception("Contact already exists");
             }
-            var contactUserContact = await _manager.Contact.GetContactAsync(contactUserId, userId, false);
-            
+
             var contact = new Contact
             {
                 UserId = userId,
                 ContactUserId = contactUserId,
-                IsAccepted = contactUserContact != null,
-                IsBlocked = false,
-                IsMuted = false,
                 AddedAt = DateTime.Now,
             };
             _manager.Contact.CreateContact(contact);
             
-            if (contactUserContact != null)
-            {
-                contactUserContact.IsAccepted = true;
-                _manager.Contact.UpdateContact(contactUserContact);
-            }
             await _manager.SaveAsync();
         }
 
@@ -102,22 +54,6 @@ namespace StormBackend.Services
             return _mapper.Map<List<ContactDto>>(contacts);
         }
 
-        public async Task MuteContact(string userId, int contactId)
-        {
-            var contact = await _manager.Contact.GetContactByIdAsync(contactId, false);
-            if (contact == null)
-            {
-                throw new Exception("Contact not found");
-            }
-            if (contact.UserId != userId)
-            {
-                throw new Exception("Unauthorized");
-            }
-            contact.IsMuted = true;
-            _manager.Contact.UpdateContact(contact);
-            await _manager.SaveAsync();
-        }
-
         public async Task DeleteContact(string userId, int contactId)
         {
             var contact = await _manager.Contact.GetContactByIdAsync(contactId, false);
@@ -130,13 +66,7 @@ namespace StormBackend.Services
                 throw new Exception("Unauthorized");
             }
             _manager.Contact.DeleteContact(contact);
-
-            var contactUserContact = await _manager.Contact.GetContactAsync(contact.ContactUserId, userId, false);
-            if (contactUserContact != null)
-            {
-                contactUserContact.IsAccepted = false;
-                _manager.Contact.UpdateContact(contactUserContact);
-            }
+            
             await _manager.SaveAsync();
         }
     }

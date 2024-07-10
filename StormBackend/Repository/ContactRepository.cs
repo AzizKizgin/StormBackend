@@ -46,21 +46,6 @@ namespace StormBackend.Repository
             {
                 contacts = contacts.Where(c => c.ContactUser.UserName == query.ContactUserName);
             }
-
-            if (query.IsAccepted.HasValue && query.IsAccepted == true)
-            {
-                contacts = contacts.Where(c => c.IsAccepted);
-            }
-
-            if (query.IsBlocked.HasValue && query.IsBlocked == true)
-            {
-                contacts = contacts.Where(c => c.IsBlocked);
-            }
-
-            if (query.IsMuted.HasValue && query.IsMuted == true)
-            {
-                contacts = contacts.Where(c => c.IsMuted);
-            }
                 
             return contacts.ToListAsync();
                 
