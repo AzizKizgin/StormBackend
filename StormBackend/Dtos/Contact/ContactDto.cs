@@ -12,9 +12,5 @@ namespace StormBackend.Dtos.Contact
         public UserDto User { get; set; }
         public UserDto ContactUser { get; set; }
         public DateTime AddedAt { get; set; }
-        public DateTime BlockedAt { get; set; }
-        public bool IsBlocked { get; set; }
-        public bool IsMuted { get; set; }
-        public bool IsAccepted { get; set; }
     }
 }

@@ -17,8 +17,7 @@ namespace StormBackend.Utilities
             CreateMap<RegisterDto, User>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username));
             CreateMap<CreateContactDto, Contact>()
-                .ForMember(dest => dest.AddedAt, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.IsAccepted, opt => opt.MapFrom(src => false));
+                .ForMember(dest => dest.AddedAt, opt => opt.MapFrom(src => DateTime.Now));
             CreateMap<Contact, ContactDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ForMember(dest => dest.ContactUser, opt => opt.MapFrom(src => src.ContactUser));
