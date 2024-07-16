@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using StormBackend.Data;
 using StormBackend.Dtos.User;
 using StormBackend.Models;
@@ -64,6 +65,17 @@ namespace StormBackend.Repository
 
         public async Task<SearchUsersResult> SearchUsers(SearchUsersQuery query, bool trackChanges)
         {
+            if (query.Username.IsNullOrEmpty())
+            {
+                return new SearchUsersResult
+                {
+                    Users = [],
+                    Page = query.Page,
+                    PageSize = query.PageSize,
+                    TotalPages = 0
+                };
+            }
+
             var users = FindAll(trackChanges)
                 .Where(u => u.UserName.ToLower().Contains(query.Username.ToLower()))
                 .Skip((query.Page - 1) * query.PageSize)
