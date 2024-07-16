@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace StormBackend.Dtos.User
 {
-    public record SearchUsersQuery
+    public class SearchUsersQuery
     {
-        public string Username { get; init; }
+        public string? Username { get; set; }
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 15;
     }
