@@ -257,5 +257,24 @@ namespace StormBackend.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize]
+        [HttpGet("get-user/{id}")]
+        public async Task<IActionResult> GetUserById([FromRoute] string id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var user = await _userService.GetUserById(id, true);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
