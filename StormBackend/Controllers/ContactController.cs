@@ -74,8 +74,8 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
-        [HttpPost("api/contact/get")]
-        public async Task<IActionResult> GetContact([FromBody] CreateContactDto getContactDto)
+        [HttpDelete("api/contact/remove/{id}")]
+        public async Task<IActionResult> DeleteContact([FromRoute] int id)
         {
             try
             {
@@ -88,31 +88,7 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("User not found");
                 }
-                var contact = await _contactService.GetContact(userId, getContactDto.ContactUserId);
-                return Ok(contact);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [Authorize]
-        [HttpPost("api/contact/delete")]
-        public async Task<IActionResult> DeleteContact([FromBody] DecideContactDto deleteContactDto)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest("Invalid model object");
-                }
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (userId == null)
-                {
-                    return BadRequest("User not found");
-                }
-                await _contactService.DeleteContact(userId, deleteContactDto.Id);
+                await _contactService.DeleteContact(userId, id);
                 var message = new SuccessMessage
                 {
                     Message = "Contact deleted successfully"
