@@ -48,9 +48,9 @@ namespace StormBackend.Services
             return _mapper.Map<ContactDto>(contact);
         }
 
-        public async Task<List<ContactDto>> GetContacts(string userId, SearchContactsQuery query)
+        public async Task<List<ContactDto>> GetContacts(string userId)
         {
-            var contacts = await _manager.Contact.GetContactsAsync(userId, query, false);
+            var contacts = await _manager.Contact.GetContactsAsync(userId,false);
             return _mapper.Map<List<ContactDto>>(contacts);
         }
 

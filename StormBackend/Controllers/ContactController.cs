@@ -51,7 +51,7 @@ namespace StormBackend.Controllers
 
         [Authorize]
         [HttpPost("api/contact/get-all")]
-        public async Task<IActionResult> GetContacts([FromBody] SearchContactsQuery query)
+        public async Task<IActionResult> GetContacts()
         {
             try
             {
@@ -64,7 +64,7 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("User not found");
                 }
-                var contacts = await _contactService.GetContacts(userId, query);
+                var contacts = await _contactService.GetContacts(userId);
                 return Ok(contacts);
             }
             catch (Exception e)

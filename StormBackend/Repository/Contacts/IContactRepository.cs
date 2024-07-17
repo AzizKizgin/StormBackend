@@ -11,7 +11,7 @@ namespace StormBackend.Repository.Contacts
     {
         Task<Contact> GetContactAsync(string userId, string contactUserId, bool trackChanges);
         Task<Contact> GetContactByIdAsync(int contactId, bool trackChanges);
-        Task<List<Contact>> GetContactsAsync(string userId, SearchContactsQuery query, bool trackChanges);
+        Task<List<Contact>> GetContactsAsync(string userId, bool trackChanges);
         void CreateContact(Contact contact);
         void UpdateContact(Contact contact);
         void DeleteContact(Contact contact);        

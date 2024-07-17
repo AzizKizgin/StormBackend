@@ -10,7 +10,7 @@ namespace StormBackend.Services.Contacts
     {
         Task CreateContact(string userId, string contactUserId);
         Task DeleteContact(string userId, int contactId);
-        Task<List<ContactDto>> GetContacts(string userId, SearchContactsQuery query);
+        Task<List<ContactDto>> GetContacts(string userId);
         Task<ContactDto> GetContact(string userId, string contactUserId);
     }
 }
