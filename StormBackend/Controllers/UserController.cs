@@ -16,10 +16,12 @@ namespace StormBackend.Controllers
     public class UserController: ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IContactService _contactService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IContactService contactService)
         {
             _userService = userService;
+            _contactService = contactService;
         }
 
         [HttpPost("login")]
@@ -67,7 +69,6 @@ namespace StormBackend.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -249,7 +250,19 @@ namespace StormBackend.Controllers
                 {
                     return BadRequest("Invalid model object");
                 }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                var userContact = await _contactService.GetContacts(userId);
                 var users = await _userService.SearchUsers(searchUsersDto, true);
+
+                foreach (var user in users.Users)
+                {
+                    user.IsContactOfCurrentUser = userContact.Any(c => c.ContactUser.Id == user.Id);
+                }
+
                 return Ok(users);
             }
             catch (Exception e)
