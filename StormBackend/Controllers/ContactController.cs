@@ -100,5 +100,33 @@ namespace StormBackend.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize]
+        [HttpDelete("api/contact/removeByUserId/{id}")]
+        public async Task<IActionResult> DeleteContactByUserId([FromRoute] string id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid model object");
+                }
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userId == null)
+                {
+                    return BadRequest("User not found");
+                }
+                await _contactService.DeleteContact(userId, id);
+                var message = new SuccessMessage
+                {
+                    Message = "Contact deleted successfully"
+                };
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

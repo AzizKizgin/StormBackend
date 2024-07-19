@@ -38,9 +38,19 @@ namespace StormBackend.Repository
             return result;
         }
 
+        public Task<Contact> GetContactByUserIdAsync(string userId, string targetId, bool trackChanges)
+        {
+            var result = FindByCondition(c => c.UserId == userId && c.ContactUserId == targetId, trackChanges).FirstOrDefaultAsync();
+            return result;
+        }
+
         public Task<List<Contact>> GetContactsAsync(string userId, bool trackChanges)
         {
-            var contacts = FindAll(trackChanges).Where(c => c.UserId == userId);
+            var contacts = FindAll(trackChanges)
+                .Where(c => c.UserId == userId)
+                .Include(c => c.ContactUser)
+                .OrderBy(c => c.ContactUser.UserName);
+            
             return contacts.ToListAsync();
                 
         }

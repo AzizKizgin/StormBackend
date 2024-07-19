@@ -69,5 +69,21 @@ namespace StormBackend.Services
             
             await _manager.SaveAsync();
         }
+
+        public async Task DeleteContact(string userId, string targetId)
+        {
+            var contact = await _manager.Contact.GetContactByUserIdAsync(userId, targetId, false);
+            if (contact == null)
+            {
+                throw new Exception("Contact not found");
+            }
+            if (contact.UserId != userId)
+            {
+                throw new Exception("Unauthorized");
+            }
+            _manager.Contact.DeleteContact(contact);
+            
+            await _manager.SaveAsync();
+        }
     }
 }
