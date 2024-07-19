@@ -13,8 +13,7 @@ namespace StormBackend.Utilities
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDto>()
-                .ForMember(dest => dest.ContactList, opt => opt.MapFrom(src => src.Contacts.Select(c => c.ContactUser.Id)));
+            CreateMap<User, UserDto>();
             CreateMap<RegisterDto, User>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username));
             CreateMap<CreateContactDto, Contact>()

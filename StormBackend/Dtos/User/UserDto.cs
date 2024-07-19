@@ -14,6 +14,6 @@ namespace StormBackend.Dtos.User
         public DateTime CreatedAt { get; init; }
         public string ProfilePicture { get; init; }
         public string? Token { get; set; }
-        public List<string> ContactList { get; init; } = [];
+        public bool IsContactOfCurrentUser { get; set; } = false;
     }
 }
