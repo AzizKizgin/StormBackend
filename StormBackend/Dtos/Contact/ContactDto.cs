@@ -8,7 +8,7 @@ namespace StormBackend.Dtos.Contact
 {
     public class ContactDto
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public UserDto ContactUser { get; set; }
         public DateTime AddedAt { get; set; }
     }
