@@ -77,16 +77,15 @@ namespace StormBackend.Repository
             }
 
             var users = FindAll(trackChanges)
-                .Where(u => u.UserName.ToLower().Contains(query.Username.ToLower()))
-                .Skip((query.Page - 1) * query.PageSize)
-                .Take(query.PageSize);
+                .Where(u => u.UserName.ToLower().StartsWith(query.Username.ToLower()));
 
             var result = new SearchUsersResult
             {
-                Users = users.ToList(),
+                Users = users .Skip((query.Page - 1) * query.PageSize)
+                .Take(query.PageSize).ToList(),
                 Page = query.Page,
                 PageSize = query.PageSize,
-                TotalPages = (int)Math.Ceiling(await FindAll(trackChanges).CountAsync() / (double)query.PageSize)
+                TotalPages = (int)Math.Ceiling(users.Count() / (double)query.PageSize)
             };
             return result;
         }
