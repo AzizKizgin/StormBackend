@@ -42,22 +42,25 @@ public class AppDBContext : IdentityDbContext<User>
                 .HasForeignKey(m => m.ChatId);
 
             modelBuilder.Entity<Chat>()
-                .HasOne(c => c.ChatMember1)
-                .WithOne()
-                .HasForeignKey<ChatMembership>(cm => cm.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Chat>()
-                .HasOne(c => c.ChatMember2)
-                .WithOne()
-                .HasForeignKey<ChatMembership>(cm => cm.Id)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasMany(c => c.Members)
+                .WithOne(cm => cm.Chat)
+                .HasForeignKey(cm => cm.ChatId);
 
             // Configure ChatMembership
             modelBuilder.Entity<ChatMembership>()
                 .HasOne(cm => cm.User)
                 .WithMany(u => u.ChatMemberships)
                 .HasForeignKey(cm => cm.UserId);
+
+            modelBuilder.Entity<Chat>()
+                .HasMany(c => c.Messages)
+                .WithOne(m => m.Chat)
+                .HasForeignKey(m => m.ChatId);
+            
+            modelBuilder.Entity<ChatMembership>()
+                .HasOne(cm => cm.Chat)
+                .WithMany(c => c.Members)
+                .HasForeignKey(cm => cm.ChatId);
 
             // Configure Contact
             modelBuilder.Entity<Contact>()

@@ -9,6 +9,10 @@ namespace StormBackend.Repository.Contacts
     {
         IUserRepository User { get; }
         IContactRepository Contact { get; }
+        IChatRepository Chat { get; }
+        IGroupRepository Group { get; }
+        IGroupMembershipRepository GroupMembership { get; }
+        IMessageRepository Message { get; }
         Task SaveAsync();
     }
 }

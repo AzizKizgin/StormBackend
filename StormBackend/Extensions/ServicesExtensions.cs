@@ -117,6 +117,12 @@ namespace StormBackend.Extensions
         public static void ConfigureRepositories(this IServiceCollection services){
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<IChatMembershipRepository, ChatMembershipRepository>();
+            services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<IChatMembershipRepository, ChatMembershipRepository>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IGroupMembershipRepository, GroupMembershipRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
         }
     }
 }
