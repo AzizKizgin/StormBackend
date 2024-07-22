@@ -23,7 +23,8 @@ public class AppDBContext : IdentityDbContext<User>
             modelBuilder.Entity<User>()
                 .HasMany(u => u.ChatMemberships)
                 .WithOne(cm => cm.User)
-                .HasForeignKey(cm => cm.UserId);
+                .HasForeignKey(cm => cm.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Contacts)
@@ -34,33 +35,39 @@ public class AppDBContext : IdentityDbContext<User>
             modelBuilder.Entity<User>()
                 .HasMany(u => u.GroupMemberships)
                 .WithOne(gm => gm.User)
-                .HasForeignKey(gm => gm.UserId);
+                .HasForeignKey(gm => gm.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
             
             modelBuilder.Entity<Chat>()
                 .HasMany(c => c.Messages)
                 .WithOne(m => m.Chat)
-                .HasForeignKey(m => m.ChatId);
+                .HasForeignKey(m => m.ChatId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Chat>()
                 .HasMany(c => c.Members)
                 .WithOne(cm => cm.Chat)
-                .HasForeignKey(cm => cm.ChatId);
+                .HasForeignKey(cm => cm.ChatId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Configure ChatMembership
             modelBuilder.Entity<ChatMembership>()
                 .HasOne(cm => cm.User)
                 .WithMany(u => u.ChatMemberships)
-                .HasForeignKey(cm => cm.UserId);
+                .HasForeignKey(cm => cm.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Chat>()
                 .HasMany(c => c.Messages)
                 .WithOne(m => m.Chat)
-                .HasForeignKey(m => m.ChatId);
+                .HasForeignKey(m => m.ChatId)
+                .OnDelete(DeleteBehavior.Restrict);
             
             modelBuilder.Entity<ChatMembership>()
                 .HasOne(cm => cm.Chat)
                 .WithMany(c => c.Members)
-                .HasForeignKey(cm => cm.ChatId);
+                .HasForeignKey(cm => cm.ChatId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Configure Contact
             modelBuilder.Entity<Contact>()
@@ -79,23 +86,27 @@ public class AppDBContext : IdentityDbContext<User>
             modelBuilder.Entity<Group>()
                 .HasMany(g => g.Members)
                 .WithOne(gm => gm.Group)
-                .HasForeignKey(gm => gm.GroupId);
+                .HasForeignKey(gm => gm.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Group>()
                 .HasMany(g => g.Messages)
                 .WithOne(m => m.Group)
-                .HasForeignKey(m => m.GroupId);
+                .HasForeignKey(m => m.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Configure GroupMembership
             modelBuilder.Entity<GroupMembership>()
                 .HasOne(gm => gm.User)
                 .WithMany(u => u.GroupMemberships)
-                .HasForeignKey(gm => gm.UserId);
+                .HasForeignKey(gm => gm.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<GroupMembership>()
                 .HasOne(gm => gm.Group)
                 .WithMany(g => g.Members)
-                .HasForeignKey(gm => gm.GroupId);
+                .HasForeignKey(gm => gm.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Configure Message
             modelBuilder.Entity<Message>()
