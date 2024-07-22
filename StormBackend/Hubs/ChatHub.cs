@@ -9,20 +9,6 @@ namespace StormBackend.SignalR
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessageToGroup(int groupId, string user, Message message)
-        {
-            await Clients.Group(groupId.ToString()).SendAsync("ReceiveMessage", user, message);
-        }
-
-        public async Task SendMessageToChat(int chatId, Message message)
-        {
-            await Clients.Group(chatId.ToString()).SendAsync("ReceiveMessage", message);
-        }
-        
-        public async Task SendMessageToUser(string userId, Message message)
-        {
-            await Clients.User(userId).SendAsync("ReceiveMessage", message);
-        }
 
         public async Task JoinChat(int chatId)
         {
