@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using StormBackend.Dtos.Chat;
+using StormBackend.Dtos.Message;
 
 namespace StormBackend.Services.Contacts
 {
@@ -14,5 +15,12 @@ namespace StormBackend.Services.Contacts
         Task MuteChat(string userId, int chatId);
         Task PinChat(string userId, int chatId);
         Task ArchiveChat(string userId, int chatId);
+        Task SendMessage(string userId, string contactUserId, MessageDto message);
+        Task SendMessage(string userId, int chatId, MessageDto message);
+        Task DeleteMessage(string userId, int messageId);
+        Task EditMessage(string userId, int messageId, string newContent);
+        Task ReactToMessage(string userId, int messageId, string emoji);
+        Task UnreactToMessage(string userId, int messageId);
+        Task ReadMessages(string userId, int chatId);
     }
 }
