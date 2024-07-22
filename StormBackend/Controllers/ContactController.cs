@@ -11,6 +11,8 @@ using StormBackend.Services.Contacts;
 
 namespace StormBackend.Controllers
 {
+    [Route("api/contact")]
+    [ApiController]
     public class ContactController: ControllerBase
     {
         private readonly IContactService _contactService;
@@ -20,7 +22,7 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]        
-        [HttpPost("api/contact/create")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateContact([FromBody] CreateContactDto createContactDto)
         {
             try
@@ -50,7 +52,7 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
-        [HttpGet("api/contact/get-all")]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetContacts()
         {
             try
@@ -79,7 +81,7 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
-        [HttpDelete("api/contact/remove/{id}")]
+        [HttpDelete("remove/{id}")]
         public async Task<IActionResult> DeleteContact([FromRoute] int id)
         {
             try
@@ -107,7 +109,7 @@ namespace StormBackend.Controllers
         }
 
         [Authorize]
-        [HttpDelete("api/contact/removeByUserId/{id}")]
+        [HttpDelete("removeByUserId/{id}")]
         public async Task<IActionResult> DeleteContactByUserId([FromRoute] string id)
         {
             try
