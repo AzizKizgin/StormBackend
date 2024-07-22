@@ -141,24 +141,18 @@ namespace StormBackend.Services
             return messageDto;
         }
 
-        public async Task<List<MessageDto>> ReadMessages(string userId, int chatId)
+        public async Task ReadMessages(string userId, int chatId)
         {
             var messages = await _manager.Message.GetMessagesAsync(chatId, false);
             foreach (var message in messages)
             {
-                if (message.SenderId != userId)
+                if (!message.ReadBy.Contains(userId))
                 {
                     message.ReadBy.Add(userId);
                     _manager.Message.UpdateMessage(message);
                 }
             }
             await _manager.SaveAsync();
-            var messageList = _mapper.Map<List<MessageDto>>(messages);
-            foreach (var message in messageList)
-            {
-                message.Type = MessageType.Read;
-            }
-            return messageList;
         }
 
         public async Task<MessageDto> SendMessage(string userId, string contactUserId, CreateMessageDto message)

@@ -123,9 +123,9 @@ namespace StormBackend.Controllers
             {
                 return BadRequest("User not found");
             }
-            var result = await _chatService.ReadMessages(userId, chatId);
-            await _hubContext.Clients.Group(chatId.ToString()).SendAsync("ReceiveMessage", result);
-            return Ok(result);
+            await _chatService.ReadMessages(userId, chatId);
+            await _hubContext.Clients.Group(chatId.ToString()).SendAsync("ReadMessage", userId);
+            return Ok();
         }
 
         [HttpPost("mute/{chatId}")]

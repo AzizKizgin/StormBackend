@@ -21,6 +21,6 @@ namespace StormBackend.Services.Contacts
         Task<MessageDto> EditMessage(string userId, int messageId, string newContent);
         Task<MessageDto> ReactToMessage(string userId, int messageId, string emoji);
         Task<MessageDto> UnreactToMessage(string userId, int messageId);
-        Task<List<MessageDto>> ReadMessages(string userId, int chatId);
+        Task ReadMessages(string userId, int chatId);
     }
 }
