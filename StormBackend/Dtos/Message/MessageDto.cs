@@ -27,5 +27,7 @@ namespace StormBackend.Dtos.Message
         Add,
         Delete,
         Edit,
+        Read,
+        Reaction,
     }
 }
