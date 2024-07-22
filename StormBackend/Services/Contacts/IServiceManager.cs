@@ -9,5 +9,6 @@ namespace StormBackend.Services.Contacts
     {
         IUserService UserService { get; }
         IContactService ContactService { get; }
+        IChatService ChatService { get; }
     }
 }

@@ -10,12 +10,15 @@ namespace StormBackend.Services
     {
         private readonly IUserService _userService;
         private readonly IContactService _contactService;
-        public ServiceManager(IUserService userService, IContactService contactService)
+        private readonly IChatService _chatService;
+        public ServiceManager(IUserService userService, IContactService contactService, IChatService chatService)
         {
             _userService = userService;
             _contactService = contactService;
+            _chatService = chatService;
         }
         public IUserService UserService => _userService;
         public IContactService ContactService => _contactService;
+        public IChatService ChatService => _chatService;
     }
 }
