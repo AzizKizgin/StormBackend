@@ -15,12 +15,12 @@ namespace StormBackend.Services.Contacts
         Task MuteChat(string userId, int chatId);
         Task PinChat(string userId, int chatId);
         Task ArchiveChat(string userId, int chatId);
-        Task SendMessage(string userId, string contactUserId, MessageDto message);
-        Task SendMessage(string userId, int chatId, MessageDto message);
-        Task DeleteMessage(string userId, int messageId);
-        Task EditMessage(string userId, int messageId, string newContent);
-        Task ReactToMessage(string userId, int messageId, string emoji);
-        Task UnreactToMessage(string userId, int messageId);
-        Task ReadMessages(string userId, int chatId);
+        Task<MessageDto> SendMessage(string userId, string contactUserId, CreateMessageDto message);
+        Task<MessageDto> SendMessage(string userId, int chatId, CreateMessageDto message);
+        Task<MessageDto> DeleteMessage(string userId, int messageId);
+        Task<MessageDto> EditMessage(string userId, int messageId, string newContent);
+        Task<MessageDto> ReactToMessage(string userId, int messageId, string emoji);
+        Task<MessageDto> UnreactToMessage(string userId, int messageId);
+        Task<List<MessageDto>> ReadMessages(string userId, int chatId);
     }
 }
