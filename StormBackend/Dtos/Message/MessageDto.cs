@@ -14,9 +14,18 @@ namespace StormBackend.Dtos.Message
         public int? ChatId { get; set; }
         public int? GroupId { get; set; }
         public string Content { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? EditedAt { get; set; }
         public List<byte[]> Media { get; set; }
         public List<string> ReadBy { get; set; }
         public List<EmojiReactionDto> Reactions { get; set; }
+        public MessageType Type { get; set; }
+    }
+
+    public enum MessageType
+    {
+        Add,
+        Delete,
+        Edit,
     }
 }
