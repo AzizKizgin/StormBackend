@@ -69,6 +69,7 @@ namespace StormBackend.Controllers
                 return BadRequest("User not found");
             }
             await _chatService.DeleteMessage(userId, messageId);
+            await _hubContext.Clients.All.SendAsync("DeleteMessage", messageId);
             return Ok();
         }
 
@@ -82,7 +83,7 @@ namespace StormBackend.Controllers
                 return BadRequest("User not found");
             }
             var result = await _chatService.EditMessage(userId, messageId, newContent.Content);
-            await _hubContext.Clients.Group(result.ChatId.ToString()).SendAsync("ReceiveMessage", result);
+            await _hubContext.Clients.Group(result.ChatId.ToString()).SendAsync("EditMessage", result);
             return Ok(result);
         }
 
@@ -96,7 +97,7 @@ namespace StormBackend.Controllers
                 return BadRequest("User not found");
             }
             var result = await _chatService.ReactToMessage(userId, messageId, emojiDto.Emoji);
-            await _hubContext.Clients.Group(result.ChatId.ToString()).SendAsync("ReceiveMessage", result);
+            await _hubContext.Clients.Group(result.ChatId.ToString()).SendAsync("EditMessage", result);
             return Ok(result);
         }
 
@@ -110,7 +111,7 @@ namespace StormBackend.Controllers
                 return BadRequest("User not found");
             }
             var result = await _chatService.UnreactToMessage(userId, messageId);
-            await _hubContext.Clients.Group(result.ChatId.ToString()).SendAsync("ReceiveMessage", result);
+            await _hubContext.Clients.Group(result.ChatId.ToString()).SendAsync("EditMessage", result);
             return Ok(result);
         }
 
