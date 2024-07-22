@@ -11,6 +11,6 @@ namespace StormBackend.Dtos.EmojiReaction
         public int Id { get; set; }
         public string Emoji { get; set; }
         public int MessageId { get; set; }
-        public UserDto Sender { get; set; }
+        public UserDto User { get; set; }
     }
 }
