@@ -15,33 +15,31 @@ namespace StormBackend.Repository
         {
         }
 
-        public void CreateChatMembership(ChatMembership chatMembership)
+        public void CreateChatMember(ChatMembership chatMembership)
         {
             Create(chatMembership);
         }
 
-        public void DeleteChatMembership(ChatMembership chatMembership)
+        public void DeleteChatMember(ChatMembership chatMembership)
         {
             Delete(chatMembership);
         }
 
-        public Task<ChatMembership> GetChatMembershipAsync(string userId, bool trackChanges)
+        public Task<ChatMembership> GetChatMemberByUserIdAsync(int chatId, string userId, bool trackChanges)
         {
-            var result = FindByCondition(c => c.User.Id == userId, trackChanges)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync();
-            return result;
+            var chatMember = FindByCondition(c => c.ChatId.Equals(chatId) && c.UserId.Equals(userId), trackChanges)
+                .SingleOrDefaultAsync();
+            return chatMember;
         }
 
-        public Task<List<ChatMembership>> GetChatMembershipsAsync(int chatId, bool trackChanges)
+        public Task<List<ChatMembership>> GetChatMembersAsync(int chatId, bool trackChanges)
         {
-            var result = FindByCondition(c => c.ChatId == chatId, trackChanges)
-                .Include(c => c.User)
+            var chatMembers = FindByCondition(c => c.ChatId.Equals(chatId), trackChanges)
                 .ToListAsync();
-            return result;
+            return chatMembers;
         }
 
-        public void UpdateChatMembership(ChatMembership chatMembership)
+        public void UpdateChatMember(ChatMembership chatMembership)
         {
             Update(chatMembership);
         }

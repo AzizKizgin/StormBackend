@@ -17,8 +17,17 @@ namespace StormBackend.Repository
         private readonly IGroupRepository _group;
         private readonly IGroupMembershipRepository _groupMembership;
         private readonly IMessageRepository _message;
+        private readonly IChatMembershipRepository _chatMembership;
 
-        public RepositoryManager(AppDBContext context, IUserRepository user, IContactRepository contact, IChatRepository chat, IGroupRepository group, IGroupMembershipRepository groupMembership, IMessageRepository message)
+        public RepositoryManager(AppDBContext context, 
+            IUserRepository user, 
+            IContactRepository contact, 
+            IChatRepository chat, 
+            IGroupRepository group, 
+            IGroupMembershipRepository groupMembership, 
+            IMessageRepository message,
+            IChatMembershipRepository chatMembership
+            )
         {
             _context = context;
             _user = user;
@@ -27,6 +36,7 @@ namespace StormBackend.Repository
             _group = group;
             _groupMembership = groupMembership;
             _message = message;
+            _chatMembership = chatMembership;
         }
 
         public IUserRepository User => _user;
@@ -40,6 +50,8 @@ namespace StormBackend.Repository
         public IGroupMembershipRepository GroupMembership => _groupMembership;
 
         public IMessageRepository Message => _message;
+
+        public IChatMembershipRepository ChatMembership { get; }
 
         public async Task SaveAsync()
         {

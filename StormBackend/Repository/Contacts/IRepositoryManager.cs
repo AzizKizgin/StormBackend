@@ -13,6 +13,8 @@ namespace StormBackend.Repository.Contacts
         IGroupRepository Group { get; }
         IGroupMembershipRepository GroupMembership { get; }
         IMessageRepository Message { get; }
+        IChatMembershipRepository ChatMembership { get; }
+
         Task SaveAsync();
     }
 }

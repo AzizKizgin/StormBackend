@@ -8,10 +8,10 @@ namespace StormBackend.Repository.Contacts
 {
     public interface IChatMembershipRepository: IRepositoryBase<ChatMembership>
     {
-        Task<List<ChatMembership>> GetChatMembershipsAsync(int chatId, bool trackChanges);
-        Task<ChatMembership> GetChatMembershipAsync(string userId, bool trackChanges);
-        void CreateChatMembership(ChatMembership chatMembership);
-        void UpdateChatMembership(ChatMembership chatMembership);
-        void DeleteChatMembership(ChatMembership chatMembership);
+        Task <List<ChatMembership>> GetChatMembersAsync(int chatId, bool trackChanges);
+        Task <ChatMembership> GetChatMemberByUserIdAsync(int chatId, string userId, bool trackChanges);
+        void CreateChatMember(ChatMembership chatMembership);
+        void UpdateChatMember(ChatMembership chatMembership);
+        void DeleteChatMember(ChatMembership chatMembership);
     }
 }
