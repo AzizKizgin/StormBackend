@@ -10,5 +10,6 @@ namespace StormBackend.Models
         public int Id { get; set; }
         public List<ChatMembership> Members { get; set; }
         public List<Message> Messages { get; set; }
+        public Message LastMessage { get; set; }
     }
 }
