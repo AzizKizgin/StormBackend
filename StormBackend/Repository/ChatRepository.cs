@@ -43,7 +43,7 @@ namespace StormBackend.Repository
         public Task<List<Chat>> GetChatsAsync(string userId, bool trackChanges)
         {
             var chats = FindByCondition(c => c.Members.Any(m => m.UserId == userId), trackChanges)
-                .OrderByDescending(c => c.Messages.OrderByDescending(m => m.Timestamp).FirstOrDefault().Timestamp)
+                .OrderByDescending(c => c.Messages.OrderByDescending(m => m.CreatedAt).FirstOrDefault().CreatedAt)
                 .Include(c => c.Members)
                 .ToListAsync();
 

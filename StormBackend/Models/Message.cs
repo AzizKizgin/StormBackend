@@ -15,7 +15,8 @@ namespace StormBackend.Models
         public int? GroupId { get; set; } // Nullable for private messages
         public Group Group { get; set; }
         public string Content { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? EditedAt { get; set; }
         public List<byte[]> Media { get; set; }
         public List<string> ReadBy { get; set; }
         public List<EmojiReaction> Reactions { get; set; }

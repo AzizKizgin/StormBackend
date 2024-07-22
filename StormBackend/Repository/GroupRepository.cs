@@ -35,7 +35,7 @@ namespace StormBackend.Repository
         public Task<List<Group>> GetGroupsAsync(string userId, bool trackChanges)
         {
             var groups = FindByCondition(g => g.Members.Any(m => m.UserId == userId), trackChanges)
-                .OrderByDescending(g => g.Messages.OrderByDescending(m => m.Timestamp).FirstOrDefault().Timestamp)
+                .OrderByDescending(g => g.Messages.OrderByDescending(m => m.CreatedAt).FirstOrDefault().CreatedAt)
                 .Include(g => g.Members)
                 .ToListAsync();
             return groups;
