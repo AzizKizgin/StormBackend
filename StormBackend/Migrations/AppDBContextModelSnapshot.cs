@@ -165,7 +165,7 @@ namespace StormBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chats", (string)null);
                 });
 
             modelBuilder.Entity("StormBackend.Models.ChatMembership", b =>
@@ -207,7 +207,7 @@ namespace StormBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatMemberships");
+                    b.ToTable("ChatMemberships", (string)null);
                 });
 
             modelBuilder.Entity("StormBackend.Models.Contact", b =>
@@ -233,7 +233,7 @@ namespace StormBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contacts", (string)null);
                 });
 
             modelBuilder.Entity("StormBackend.Models.EmojiReaction", b =>
@@ -261,7 +261,7 @@ namespace StormBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EmojiReactions");
+                    b.ToTable("EmojiReactions", (string)null);
                 });
 
             modelBuilder.Entity("StormBackend.Models.Group", b =>
@@ -289,7 +289,7 @@ namespace StormBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("StormBackend.Models.GroupMembership", b =>
@@ -327,7 +327,7 @@ namespace StormBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GroupMemberships");
+                    b.ToTable("GroupMemberships", (string)null);
                 });
 
             modelBuilder.Entity("StormBackend.Models.Message", b =>
@@ -370,7 +370,7 @@ namespace StormBackend.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("StormBackend.Models.User", b =>
