@@ -9,6 +9,7 @@ using StormBackend.Dtos.User;
 using StormBackend.Dtos.ChatMember;
 using StormBackend.Models;
 using StormBackend.Dtos.Message;
+using StormBackend.Dtos.EmojiReaction;
 
 namespace StormBackend.Utilities
 {
@@ -25,6 +26,8 @@ namespace StormBackend.Utilities
             CreateMap<ChatMembership, ChatMemberDto>();
             CreateMap<Chat, ChatDto>();
             CreateMap<Message, MessageDto>();
+            CreateMap<CreateMessageDto, Message>();
+            CreateMap<EmojiReaction, EmojiReactionDto>();
         }
     }
 }
