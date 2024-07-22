@@ -18,6 +18,7 @@ namespace StormBackend.Repository
         private readonly IGroupMembershipRepository _groupMembership;
         private readonly IMessageRepository _message;
         private readonly IChatMembershipRepository _chatMembership;
+        private readonly IEmojiReactionRepository _emojiReaction;
 
         public RepositoryManager(AppDBContext context, 
             IUserRepository user, 
@@ -26,7 +27,8 @@ namespace StormBackend.Repository
             IGroupRepository group, 
             IGroupMembershipRepository groupMembership, 
             IMessageRepository message,
-            IChatMembershipRepository chatMembership
+            IChatMembershipRepository chatMembership,
+            IEmojiReactionRepository emojiReaction
             )
         {
             _context = context;
@@ -37,6 +39,7 @@ namespace StormBackend.Repository
             _groupMembership = groupMembership;
             _message = message;
             _chatMembership = chatMembership;
+            _emojiReaction = emojiReaction;
         }
 
         public IUserRepository User => _user;
@@ -51,7 +54,10 @@ namespace StormBackend.Repository
 
         public IMessageRepository Message => _message;
 
-        public IChatMembershipRepository ChatMembership { get; }
+        public IChatMembershipRepository ChatMembership => _chatMembership;
+
+        public IEmojiReactionRepository EmojiReaction => _emojiReaction;
+
 
         public async Task SaveAsync()
         {

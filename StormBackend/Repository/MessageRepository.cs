@@ -32,7 +32,22 @@ namespace StormBackend.Repository
                 .Include(m => m.Chat)
                 .Include(m => m.Group)
                 .Include(m => m.Reactions)
+                .ThenInclude(r => r.User)
+                .OrderByDescending(m => m.Timestamp)
                 .FirstOrDefaultAsync();
+            return result;
+        }
+
+        public Task<List<Message>> GetMessagesAsync(int chatId, bool trackChanges)
+        {
+            var result = FindByCondition(m => m.ChatId == chatId, trackChanges)
+                .Include(m => m.Sender)
+                .Include(m => m.Chat)
+                .Include(m => m.Group)
+                .Include(m => m.Reactions)
+                .ThenInclude(r => r.User)
+                .OrderByDescending(m => m.Timestamp)
+                .ToListAsync();
             return result;
         }
 

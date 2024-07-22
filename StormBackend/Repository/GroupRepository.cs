@@ -28,11 +28,6 @@ namespace StormBackend.Repository
         {
             var result = FindByCondition(g => g.Id == groupId, trackChanges)
                 .Include(g => g.Members)
-                .Include(g => g.Messages)
-                .ThenInclude(m => m.Sender)
-                .Include(g => g.Messages)
-                .ThenInclude(m => m.Reactions)
-                .OrderByDescending(g => g.Messages.OrderByDescending(m => m.Timestamp).FirstOrDefault().Timestamp)
                 .FirstOrDefaultAsync();
             return result;
         }

@@ -14,6 +14,8 @@ namespace StormBackend.Repository.Contacts
         IGroupMembershipRepository GroupMembership { get; }
         IMessageRepository Message { get; }
         IChatMembershipRepository ChatMembership { get; }
+        IEmojiReactionRepository EmojiReaction { get; }
+        
 
         Task SaveAsync();
     }

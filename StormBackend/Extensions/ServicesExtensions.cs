@@ -124,6 +124,7 @@ namespace StormBackend.Extensions
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IGroupMembershipRepository, GroupMembershipRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IEmojiReactionRepository, EmojiReactionRepository>();
         }
     }
 }

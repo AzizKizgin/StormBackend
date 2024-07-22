@@ -28,11 +28,6 @@ namespace StormBackend.Repository
         {
             var result = FindByCondition(c => c.Members.Any(m => m.UserId == userId), trackChanges)
                 .Include(c => c.Members)
-                .Include(c => c.Messages)
-                .ThenInclude(m => m.Sender)
-                .Include(g => g.Messages)
-                .ThenInclude(m => m.Reactions)
-                .OrderByDescending(c => c.Messages.OrderByDescending(m => m.Timestamp).FirstOrDefault().Timestamp)
                 .FirstOrDefaultAsync();   
             return result;
         }
@@ -41,11 +36,6 @@ namespace StormBackend.Repository
         {
             var result = FindByCondition(c => c.Id == chatId, trackChanges)
                 .Include(c => c.Members)
-                .Include(c => c.Messages)
-                .ThenInclude(m => m.Sender)
-                .Include(g => g.Messages)
-                .ThenInclude(m => m.Reactions)
-                .OrderByDescending(c => c.Messages.OrderByDescending(m => m.Timestamp).FirstOrDefault().Timestamp)
                 .FirstOrDefaultAsync();
             return result;
         }
