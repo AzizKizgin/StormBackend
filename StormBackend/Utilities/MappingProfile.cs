@@ -23,10 +23,14 @@ namespace StormBackend.Utilities
             CreateMap<CreateContactDto, Contact>()
                 .ForMember(dest => dest.AddedAt, opt => opt.MapFrom(src => DateTime.Now));
             CreateMap<Contact, ContactDto>();
-            CreateMap<ChatMembership, ChatMemberDto>();
-            CreateMap<Chat, ChatDto>();
-            CreateMap<Message, MessageDto>();
-            CreateMap<CreateMessageDto, Message>();
+            CreateMap<ChatMembership, ChatMemberDto>()
+                .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.UserId.ToString()));
+            CreateMap<Chat, ChatDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+            CreateMap<Message, MessageDto>()
+                .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId.ToString()));
+            CreateMap<CreateMessageDto, Message>()
+                .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => Guid.Parse(src.ChatId)));
             CreateMap<EmojiReaction, EmojiReactionDto>();
         }
     }

@@ -10,7 +10,7 @@ namespace StormBackend.Models
         public int Id { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
-        public int ChatId { get; set; }
+        public Guid ChatId { get; set; }
         public Chat Chat { get; set; }
         public DateTime JoinedAt { get; set; } 
         public DateTime? LastDeletedAt { get; set; }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StormBackend.Data;
 
@@ -11,9 +12,11 @@ using StormBackend.Data;
 namespace StormBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240723161925_ChatIdUpdate")]
+    partial class ChatIdUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,6 +342,9 @@ namespace StormBackend.Migrations
                     b.Property<Guid?>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ChatId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -366,6 +372,10 @@ namespace StormBackend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
+
+                    b.HasIndex("ChatId1")
+                        .IsUnique()
+                        .HasFilter("[ChatId1] IS NOT NULL");
 
                     b.HasIndex("GroupId");
 
@@ -582,6 +592,10 @@ namespace StormBackend.Migrations
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("StormBackend.Models.Chat", null)
+                        .WithOne("LastMessage")
+                        .HasForeignKey("StormBackend.Models.Message", "ChatId1");
+
                     b.HasOne("StormBackend.Models.Group", "Group")
                         .WithMany("Messages")
                         .HasForeignKey("GroupId")
@@ -601,6 +615,9 @@ namespace StormBackend.Migrations
 
             modelBuilder.Entity("StormBackend.Models.Chat", b =>
                 {
+                    b.Navigation("LastMessage")
+                        .IsRequired();
+
                     b.Navigation("Members");
 
                     b.Navigation("Messages");

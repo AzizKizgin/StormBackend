@@ -10,7 +10,7 @@ namespace StormBackend.Repository.Contacts
     {
         Task<List<Chat>> GetChatsAsync(string userId, bool trackChanges);
         Task<Chat> GetChatAsync(string userId, string targetId, bool trackChanges);
-        Task<Chat> GetChatByIdAsync(int chatId, bool trackChanges);
+        Task<Chat> GetChatByIdAsync(string chatId, bool trackChanges);
         void CreateChat(Chat chat);
         void UpdateChat(Chat chat);
         void DeleteChat(Chat chat);

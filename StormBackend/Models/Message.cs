@@ -10,7 +10,7 @@ namespace StormBackend.Models
         public int Id { get; set; }
         public string?  SenderId { get; set; }
         public User Sender { get; set; }
-        public int? ChatId { get; set; } // Nullable for group messages
+        public Guid? ChatId { get; set; } // Nullable for group messages
         public Chat Chat { get; set; }
         public int? GroupId { get; set; } // Nullable for private messages
         public Group Group { get; set; }

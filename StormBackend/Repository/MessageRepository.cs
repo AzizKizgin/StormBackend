@@ -36,9 +36,9 @@ namespace StormBackend.Repository
             return result;
         }
 
-        public Task<List<Message>> GetMessagesAsync(int chatId, bool trackChanges)
+        public Task<List<Message>> GetMessagesAsync(string chatId, bool trackChanges)
         {
-            var result = FindByCondition(m => m.ChatId == chatId || m.GroupId == chatId, trackChanges)
+            var result = FindByCondition(m => m.ChatId.ToString() == chatId || m.GroupId.ToString() == chatId, trackChanges)
                 .Include(m => m.Sender)
                 .Include(m => m.Reactions)
                 .ThenInclude(r => r.User)
@@ -47,9 +47,9 @@ namespace StormBackend.Repository
             return result;
         }
 
-        public Task<List<Message>> GetUnreadMessageAsync(int chatId, string userId, bool trackChanges)
+        public Task<List<Message>> GetUnreadMessageAsync(string chatId, string userId, bool trackChanges)
         {
-            var result = FindByCondition(m => m.ChatId == chatId || m.GroupId == chatId && m.SenderId != userId && !m.ReadBy.Any(r => r == userId), trackChanges)
+            var result = FindByCondition(m => m.ChatId.ToString() == chatId || m.GroupId.ToString() == chatId && m.SenderId != userId && !m.ReadBy.Any(r => r == userId), trackChanges)
                 .Include(m => m.Sender)
                 .Include(m => m.Reactions)
                 .ThenInclude(r => r.User)

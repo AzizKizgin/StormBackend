@@ -11,7 +11,7 @@ namespace StormBackend.Dtos.Message
     {
         public int Id { get; set; }
         public UserDto Sender { get; set; }
-        public int? ChatId { get; set; }
+        public string? ChatId { get; set; }
         public int? GroupId { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }

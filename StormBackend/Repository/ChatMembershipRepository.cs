@@ -25,16 +25,16 @@ namespace StormBackend.Repository
             Delete(chatMembership);
         }
 
-        public Task<ChatMembership> GetChatMemberByUserIdAsync(int chatId, string userId, bool trackChanges)
+        public Task<ChatMembership> GetChatMemberByUserIdAsync(string chatId, string userId, bool trackChanges)
         {
-            var chatMember = FindByCondition(c => c.ChatId.Equals(chatId) && c.UserId.Equals(userId), trackChanges)
+            var chatMember = FindByCondition(c => c.ChatId.ToString().Equals(chatId) && c.UserId.Equals(userId), trackChanges)
                 .SingleOrDefaultAsync();
             return chatMember;
         }
 
-        public Task<List<ChatMembership>> GetChatMembersAsync(int chatId, bool trackChanges)
+        public Task<List<ChatMembership>> GetChatMembersAsync(string chatId, bool trackChanges)
         {
-            var chatMembers = FindByCondition(c => c.ChatId.Equals(chatId), trackChanges)
+            var chatMembers = FindByCondition(c => c.ChatId.ToString().Equals(chatId), trackChanges)
                 .ToListAsync();
             return chatMembers;
         }

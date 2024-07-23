@@ -43,8 +43,8 @@ namespace StormBackend.Controllers
             MessageDto result;
             if (message.ChatId != null)
             {
-                result = await _chatService.SendMessage(userId, message.ChatId.Value, message);
-                await _hubContext.Clients.Group(message.ChatId.Value.ToString()).SendAsync("ReceiveMessage", result);
+                result = await _chatService.SendMessage(userId, message.ChatId, message);
+                await _hubContext.Clients.Group(message.ChatId.ToString()).SendAsync("ReceiveMessage", result);
               
             }
             else if (message.GroupId != null)
@@ -117,7 +117,7 @@ namespace StormBackend.Controllers
 
         [HttpPost("read/{chatId}")]
         [Authorize]
-        public async Task<IActionResult> ReadMessages(int chatId)
+        public async Task<IActionResult> ReadMessages(string chatId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
@@ -131,7 +131,7 @@ namespace StormBackend.Controllers
 
         [HttpPost("mute/{chatId}")]
         [Authorize]
-        public async Task<IActionResult> MuteChat(int chatId)
+        public async Task<IActionResult> MuteChat(string chatId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
@@ -144,7 +144,7 @@ namespace StormBackend.Controllers
 
         [HttpPost("pin/{chatId}")]
         [Authorize]
-        public async Task<IActionResult> PinChat(int chatId)
+        public async Task<IActionResult> PinChat(string chatId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
@@ -157,7 +157,7 @@ namespace StormBackend.Controllers
 
         [HttpPost("archive/{chatId}")]
         [Authorize]
-        public async Task<IActionResult> ArchiveChat(int chatId)
+        public async Task<IActionResult> ArchiveChat(string chatId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)

@@ -10,7 +10,7 @@ namespace StormBackend.Dtos.Message
         public string Content { get; set; }
         public string? ReceiverId { get; set; }
         public List<byte[]>? Media { get; set; } = null;
-        public int? ChatId { get; set; }
+        public string? ChatId { get; set; }
         public int? GroupId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? EditedAt { get; set; } = null;

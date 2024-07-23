@@ -32,9 +32,9 @@ namespace StormBackend.Repository
             return result;
         }
 
-        public Task<Chat> GetChatByIdAsync(int chatId, bool trackChanges)
+        public Task<Chat> GetChatByIdAsync(string chatId, bool trackChanges)
         {
-            var result = FindByCondition(c => c.Id == chatId, trackChanges)
+            var result = FindByCondition(c => c.Id.ToString() == chatId, trackChanges)
                 .Include(c => c.Members)
                 .FirstOrDefaultAsync();
             return result;

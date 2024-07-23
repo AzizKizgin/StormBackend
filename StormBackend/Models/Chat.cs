@@ -7,9 +7,8 @@ namespace StormBackend.Models
 {
     public class Chat
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public List<ChatMembership> Members { get; set; }
         public List<Message> Messages { get; set; }
-        public Message LastMessage { get; set; }
     }
 }
