@@ -29,8 +29,6 @@ namespace StormBackend.Repository
         {
             var result = FindByCondition(m => m.Id == messageId && m.SenderId == userId, trackChanges)
                 .Include(m => m.Sender)
-                .Include(m => m.Chat)
-                .Include(m => m.Group)
                 .Include(m => m.Reactions)
                 .ThenInclude(r => r.User)
                 .OrderByDescending(m => m.CreatedAt)
@@ -40,10 +38,19 @@ namespace StormBackend.Repository
 
         public Task<List<Message>> GetMessagesAsync(int chatId, bool trackChanges)
         {
-            var result = FindByCondition(m => m.ChatId == chatId, trackChanges)
+            var result = FindByCondition(m => m.ChatId == chatId || m.GroupId == chatId, trackChanges)
                 .Include(m => m.Sender)
-                .Include(m => m.Chat)
-                .Include(m => m.Group)
+                .Include(m => m.Reactions)
+                .ThenInclude(r => r.User)
+                .OrderByDescending(m => m.CreatedAt)
+                .ToListAsync();
+            return result;
+        }
+
+        public Task<List<Message>> GetUnreadMessageAsync(int chatId, string userId, bool trackChanges)
+        {
+            var result = FindByCondition(m => m.ChatId == chatId || m.GroupId == chatId && m.SenderId != userId && !m.ReadBy.Any(r => r == userId), trackChanges)
+                .Include(m => m.Sender)
                 .Include(m => m.Reactions)
                 .ThenInclude(r => r.User)
                 .OrderByDescending(m => m.CreatedAt)
