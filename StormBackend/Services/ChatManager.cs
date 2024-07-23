@@ -79,14 +79,26 @@ namespace StormBackend.Services
         {
             var chat = await _manager.Chat.GetChatAsync(userId, contactUserId, false);
             var messages = await _manager.Message.GetMessagesAsync(chat.Id, false);
-            chat.Messages = messages;
-            return _mapper.Map<ChatDto>(chat);
+            var unreadMessages = await _manager.Message.GetUnreadMessageAsync(chat.Id, userId, false);
+            var chatDto = _mapper.Map<ChatDto>(chat);
+            chatDto.Messages = _mapper.Map<List<MessageDto>>(messages);
+            chatDto.UnreadMessages = _mapper.Map<List<MessageDto>>(unreadMessages);
+            return chatDto;
         }
 
         public async Task<List<ChatDto>> GetChats(string userId)
         {
             var chats = await _manager.Chat.GetChatsAsync(userId, false);
-            return _mapper.Map<List<ChatDto>>(chats);
+            var chatIds = chats.Select(c => c.Id).ToList();
+            var chatsDto = _mapper.Map<List<ChatDto>>(chats);
+            foreach (var chat in chatsDto)
+            {
+                var messages = await _manager.Message.GetMessagesAsync(chat.Id, false);
+                var unreadMessages = await _manager.Message.GetUnreadMessageAsync(chat.Id, userId, false);
+                chat.Messages = _mapper.Map<List<MessageDto>>(messages);
+                chat.UnreadMessages = _mapper.Map<List<MessageDto>>(unreadMessages);
+            }
+            return chatsDto;
         }
 
         public async Task MuteChat(string userId, int chatId)
