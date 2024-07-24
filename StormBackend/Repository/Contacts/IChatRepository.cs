@@ -9,7 +9,7 @@ namespace StormBackend.Repository.Contacts
     public interface IChatRepository: IRepositoryBase<Chat>
     {
         Task<List<Chat>> GetChatsAsync(string userId, bool trackChanges);
-        Task<Chat> GetChatAsync(string userId, string targetId, bool trackChanges);
+        Task<Chat> GetChatByTargetIdAsync(string userId, string targetId, bool trackChanges);
         Task<Chat> GetChatByIdAsync(string chatId, bool trackChanges);
         void CreateChat(Chat chat);
         void UpdateChat(Chat chat);

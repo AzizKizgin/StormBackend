@@ -24,9 +24,9 @@ namespace StormBackend.Repository
             Delete(chat);
         }
 
-        public Task<Chat> GetChatAsync(string userId, string targetId, bool trackChanges)
+        public Task<Chat> GetChatByTargetIdAsync(string userId, string targetId, bool trackChanges)
         {
-            var result = FindByCondition(c => c.Members.Any(m => m.UserId == userId), trackChanges)
+            var result = FindByCondition(c => c.Members.Any(m => m.UserId == userId) && c.Members.Any(m => m.UserId == targetId), trackChanges)
                 .Include(c => c.Members)
                 .FirstOrDefaultAsync();   
             return result;
