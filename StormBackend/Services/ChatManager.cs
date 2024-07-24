@@ -75,14 +75,21 @@ namespace StormBackend.Services
             return messageDto;
         }
 
-        public async Task<ChatDto> GetChat(string userId, string contactUserId)
+        public async Task<ChatDto> GetChatByContactId(string userId, string contactUserId)
         {
-            var chat = await _manager.Chat.GetChatAsync(userId, contactUserId, false);
+            var chat = await _manager.Chat.GetChatByTargetIdAsync(userId, contactUserId, false);
             var messages = await _manager.Message.GetMessagesAsync(chat.Id.ToString(), false);
-            var unreadMessages = await _manager.Message.GetUnreadMessageAsync(chat.Id.ToString(), userId, false);
             var chatDto = _mapper.Map<ChatDto>(chat);
             chatDto.Messages = _mapper.Map<List<MessageDto>>(messages);
-            chatDto.UnreadMessages = _mapper.Map<List<MessageDto>>(unreadMessages);
+            return chatDto;
+        }
+
+        public async Task<ChatDto> GetChatById(string userId, string chatId)
+        {
+            var chat = await _manager.Chat.GetChatByIdAsync(chatId, false);
+            var messages = _manager.Message.GetMessagesAsync(chatId, false);
+            var chatDto = _mapper.Map<ChatDto>(chat);
+            chatDto.Messages = _mapper.Map<List<MessageDto>>(messages);
             return chatDto;
         }
 
@@ -94,9 +101,7 @@ namespace StormBackend.Services
             foreach (var chat in chatsDto)
             {
                 var messages = await _manager.Message.GetMessagesAsync(chat.Id, false);
-                var unreadMessages = await _manager.Message.GetUnreadMessageAsync(chat.Id, userId, false);
                 chat.Messages = _mapper.Map<List<MessageDto>>(messages);
-                chat.UnreadMessages = _mapper.Map<List<MessageDto>>(unreadMessages);
             }
             return chatsDto;
         }
@@ -169,7 +174,7 @@ namespace StormBackend.Services
 
         public async Task<MessageDto> SendMessageByContactId(string userId, string contactUserId, CreateMessageDto message)
         {
-            var chat = await _manager.Chat.GetChatAsync(userId, contactUserId, false);
+            var chat = await _manager.Chat.GetChatByTargetIdAsync(userId, contactUserId, false);
             if (chat == null)
             {
                 chat = new Chat
@@ -197,6 +202,8 @@ namespace StormBackend.Services
                 CreatedAt = DateTime.Now
             };
             _manager.Message.CreateMessage(newMessage);
+            chat.Messages.Add(newMessage);
+            _manager.Chat.UpdateChat(chat);
             await _manager.SaveAsync();
             var messageDto = _mapper.Map<MessageDto>(newMessage);
             messageDto.Type = MessageType.Add;

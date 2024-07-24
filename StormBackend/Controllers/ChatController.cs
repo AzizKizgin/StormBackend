@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using StormBackend.Dtos;
 using StormBackend.Dtos.EmojiReaction;
 using StormBackend.Dtos.Message;
 using StormBackend.Services.Contacts;
@@ -40,7 +41,7 @@ namespace StormBackend.Controllers
             }
                 
             
-            MessageDto result;
+            MessageDto result = null;
             if (message.ChatId != null)
             {
                 result = await _chatService.SendMessage(userId, message.ChatId, message);
@@ -51,9 +52,9 @@ namespace StormBackend.Controllers
             {
                 result = null;
             }
-            else
+            else if (message.ReceiverId != null)
             {
-                result = await _chatService.SendMessage(userId, message.ReceiverId, message);
+                result = await _chatService.SendMessageByContactId(userId, message.ReceiverId, message);
                 await _hubContext.Clients.User(message.ReceiverId).SendAsync("ReceiveMessage", result);
             }
             return Ok(result);
@@ -126,7 +127,11 @@ namespace StormBackend.Controllers
             }
             await _chatService.ReadMessages(userId, chatId);
             await _hubContext.Clients.Group(chatId.ToString()).SendAsync("ReadMessage", userId);
-            return Ok();
+            var successMessage = new SuccessMessage
+            {
+                Message = "Messages read successfully"
+            };
+            return Ok(successMessage);
         }
 
         [HttpPost("mute/{chatId}")]
@@ -177,11 +182,18 @@ namespace StormBackend.Controllers
             {
                 return BadRequest("User not found");
             }
-            var result = await _chatService.GetChat(userId, chatId);
+            var result = 
+                await _chatService.GetChatById(userId, chatId) 
+                ?? await _chatService.GetChatByContactId(userId, chatId);
+
+            if (result == null)
+            {
+                return BadRequest("Chat not found");
+            }
             return Ok(result);
         }
 
-        [HttpGet("get")]
+        [HttpGet("get-all")]
         [Authorize]
         public async Task<IActionResult> GetChats()
         {
