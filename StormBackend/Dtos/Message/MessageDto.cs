@@ -19,7 +19,7 @@ namespace StormBackend.Dtos.Message
         public List<byte[]> Media { get; set; }
         public List<string> ReadBy { get; set; }
         public List<EmojiReactionDto> Reactions { get; set; }
-        public MessageType Type { get; set; }
+        public MessageType? Type { get; set; } = null;
     }
 
     public enum MessageType
