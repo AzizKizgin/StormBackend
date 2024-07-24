@@ -11,7 +11,8 @@ namespace StormBackend.Services.Contacts
     {
         Task DeleteChat(string userId, string chatId);
         Task<List<ChatDto>> GetChats(string userId);
-        Task<ChatDto> GetChat(string userId, string contactUserId);
+        Task<ChatDto> GetChatByContactId(string userId, string contactUserId);
+        Task<ChatDto> GetChatById(string userId, string chatId);
         Task MuteChat(string userId, string chatId);
         Task PinChat(string userId, string chatId);
         Task ArchiveChat(string userId, string chatId);
