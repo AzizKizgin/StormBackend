@@ -12,8 +12,8 @@ using StormBackend.Data;
 namespace StormBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240723162225_ChatUpdate")]
-    partial class ChatUpdate
+    [Migration("20240725222600_message")]
+    partial class message
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

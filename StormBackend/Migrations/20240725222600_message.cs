@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StormBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class ChatUpdate : Migration
+    public partial class message : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
