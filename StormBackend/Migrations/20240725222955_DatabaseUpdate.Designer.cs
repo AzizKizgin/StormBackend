@@ -12,8 +12,8 @@ using StormBackend.Data;
 namespace StormBackend.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240722194916_MessageEditDate")]
-    partial class MessageEditDate
+    [Migration("20240725222955_DatabaseUpdate")]
+    partial class DatabaseUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -160,11 +160,9 @@ namespace StormBackend.Migrations
 
             modelBuilder.Entity("StormBackend.Models.Chat", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -179,8 +177,8 @@ namespace StormBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsArchived")
                         .HasColumnType("bit");
@@ -341,11 +339,8 @@ namespace StormBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ChatId1")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ChatId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -374,10 +369,6 @@ namespace StormBackend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
-
-                    b.HasIndex("ChatId1")
-                        .IsUnique()
-                        .HasFilter("[ChatId1] IS NOT NULL");
 
                     b.HasIndex("GroupId");
 
@@ -594,10 +585,6 @@ namespace StormBackend.Migrations
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("StormBackend.Models.Chat", null)
-                        .WithOne("LastMessage")
-                        .HasForeignKey("StormBackend.Models.Message", "ChatId1");
-
                     b.HasOne("StormBackend.Models.Group", "Group")
                         .WithMany("Messages")
                         .HasForeignKey("GroupId")
@@ -617,9 +604,6 @@ namespace StormBackend.Migrations
 
             modelBuilder.Entity("StormBackend.Models.Chat", b =>
                 {
-                    b.Navigation("LastMessage")
-                        .IsRequired();
-
                     b.Navigation("Members");
 
                     b.Navigation("Messages");
