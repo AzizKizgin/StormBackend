@@ -28,6 +28,10 @@ namespace StormBackend.Services
         {
             var user = await _manager.User.GetUserAsync(id, false);
             var result = await _manager.User.DeleteUser(user);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to delete user");
+            }
             await _manager.SaveAsync();
         }
 
