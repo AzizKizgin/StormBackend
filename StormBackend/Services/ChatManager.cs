@@ -24,7 +24,7 @@ namespace StormBackend.Services
 
         public async Task ArchiveChat(string userId, string chatId)
         {
-            var chatMember = await _manager.ChatMembership.GetChatMemberByUserIdAsync(chatId, userId, false);
+            var chatMember = await _manager.ChatMembership.GetChatMemberByUserIdAsync(chatId, userId, true);
             if (chatMember == null)
             {
                 throw new Exception("Chat member not found");
@@ -47,7 +47,7 @@ namespace StormBackend.Services
 
         public async Task<MessageDto> DeleteMessage(string userId, int messageId)
         {
-            var message = await _manager.Message.GetMessageAsync(messageId, userId, false);
+            var message = await _manager.Message.GetMessageAsync(messageId, userId, true);
             if (message == null)
             {
                 throw new Exception("Message not found");
@@ -61,7 +61,7 @@ namespace StormBackend.Services
 
         public async Task<MessageDto> EditMessage(string userId, int messageId, string newContent)
         {
-            var message = await _manager.Message.GetMessageAsync(messageId, userId, false);
+            var message = await _manager.Message.GetMessageAsync(messageId, userId, true);
             if (message == null)
             {
                 throw new Exception("Message not found");
@@ -78,37 +78,51 @@ namespace StormBackend.Services
         public async Task<ChatDto> GetChatByContactId(string userId, string contactUserId)
         {
             var chat = await _manager.Chat.GetChatByTargetIdAsync(userId, contactUserId, false);
-            var messages = await _manager.Message.GetMessagesAsync(chat.Id.ToString(), false);
+            if (chat == null)
+            {
+                var newChat = new Chat
+                {
+                    Id = Guid.NewGuid(),
+                    Members = new List<ChatMembership>
+                    {
+                        new ChatMembership { UserId = userId },
+                        new ChatMembership { UserId = contactUserId }
+                    },
+                    Messages = new List<Message>()
+                };
+                _manager.Chat.CreateChat(newChat);
+                await _manager.SaveAsync();
+                chat = newChat;
+            }
             var chatDto = _mapper.Map<ChatDto>(chat);
-            chatDto.Messages = _mapper.Map<List<MessageDto>>(messages);
             return chatDto;
         }
 
         public async Task<ChatDto> GetChatById(string userId, string chatId)
         {
             var chat = await _manager.Chat.GetChatByIdAsync(chatId, false);
-            var messages = _manager.Message.GetMessagesAsync(chatId, false);
+            var messages = await _manager.Message.GetMessagesAsync(chatId, false);
+            chat.Messages = messages;
             var chatDto = _mapper.Map<ChatDto>(chat);
-            chatDto.Messages = _mapper.Map<List<MessageDto>>(messages);
             return chatDto;
         }
 
         public async Task<List<ChatDto>> GetChats(string userId)
         {
             var chats = await _manager.Chat.GetChatsAsync(userId, false);
-            var chatIds = chats.Select(c => c.Id).ToList();
             var chatsDto = _mapper.Map<List<ChatDto>>(chats);
             foreach (var chat in chatsDto)
             {
-                var messages = await _manager.Message.GetMessagesAsync(chat.Id, false);
+                var messages = await _manager.Message.GetMessagesAsync(chat.Id.ToString(), false);
                 chat.Messages = _mapper.Map<List<MessageDto>>(messages);
             }
+          
             return chatsDto;
         }
 
         public async Task MuteChat(string userId, string chatId)
         {
-            var chatMember = await _manager.ChatMembership.GetChatMemberByUserIdAsync(chatId, userId, false);
+            var chatMember = await _manager.ChatMembership.GetChatMemberByUserIdAsync(chatId, userId, true);
             if (chatMember == null)
             {
                 throw new Exception("Chat member not found");
@@ -120,7 +134,7 @@ namespace StormBackend.Services
 
         public async Task PinChat(string userId, string chatId)
         {
-            var chatMember = await _manager.ChatMembership.GetChatMemberByUserIdAsync(chatId, userId, false);
+            var chatMember = await _manager.ChatMembership.GetChatMemberByUserIdAsync(chatId, userId, true);
             if (chatMember == null)
             {
                 throw new Exception("Chat member not found");
@@ -132,7 +146,7 @@ namespace StormBackend.Services
 
         public async Task<MessageDto> ReactToMessage(string userId, int messageId, string emoji)
         {
-            var message = await _manager.Message.GetMessageAsync(messageId, userId, false);
+            var message = await _manager.Message.GetMessageAsync(messageId, userId, true);
             if (message == null)
             {
                 throw new Exception("Message not found");
@@ -160,7 +174,7 @@ namespace StormBackend.Services
 
         public async Task ReadMessages(string userId, string chatId)
         {
-            var messages = await _manager.Message.GetMessagesAsync(chatId.ToString(), false);
+            var messages = await _manager.Message.GetMessagesAsync(chatId, true);
             foreach (var message in messages)
             {
                 if (!message.ReadBy.Contains(userId))
@@ -172,54 +186,18 @@ namespace StormBackend.Services
             await _manager.SaveAsync();
         }
 
-        public async Task<MessageDto> SendMessageByContactId(string userId, string contactUserId, CreateMessageDto message)
-        {
-            var chat = await _manager.Chat.GetChatByTargetIdAsync(userId, contactUserId, false);
-            if (chat == null)
-            {
-                chat = new Chat
-                {
-                    Members = new List<ChatMembership>
-                    {
-                        new ChatMembership
-                        {
-                            UserId = userId
-                        },
-                        new ChatMembership
-                        {
-                            UserId = contactUserId
-                        }
-                    }
-                };
-                _manager.Chat.CreateChat(chat);
-                await _manager.SaveAsync();
-            }
-            var newMessage = new Message
-            {
-                ChatId = chat.Id,
-                Content = message.Content,
-                SenderId = userId,
-                CreatedAt = DateTime.Now
-            };
-            _manager.Message.CreateMessage(newMessage);
-            chat.Messages.Add(newMessage);
-            _manager.Chat.UpdateChat(chat);
-            await _manager.SaveAsync();
-            var messageDto = _mapper.Map<MessageDto>(newMessage);
-            messageDto.Type = MessageType.Add;
-            return messageDto;
-        }
-
         public async Task<MessageDto> SendMessage(string userId, string chatId, CreateMessageDto message)
         {
             var newMessage = new Message
             {
-                ChatId = Guid.Parse(chatId.ToString()),
+                ChatId = Guid.Parse(chatId),
                 Content = message.Content,
                 SenderId = userId,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                ReadBy = new List<string> { userId }
+                
             };
-            var chat = await _manager.Chat.GetChatByIdAsync(chatId.ToString(), false);
+            var chat = await _manager.Chat.GetChatByIdAsync(chatId.ToString(), true);
             if (chat == null)
             {
                 throw new Exception("Chat not found");

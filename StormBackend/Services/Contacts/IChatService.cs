@@ -16,7 +16,6 @@ namespace StormBackend.Services.Contacts
         Task MuteChat(string userId, string chatId);
         Task PinChat(string userId, string chatId);
         Task ArchiveChat(string userId, string chatId);
-        Task<MessageDto> SendMessageByContactId(string userId, string contactUserId, CreateMessageDto message);
         Task<MessageDto> SendMessage(string userId, string chatId, CreateMessageDto message);
         Task<MessageDto> DeleteMessage(string userId, int messageId);
         Task<MessageDto> EditMessage(string userId, int messageId, string newContent);
