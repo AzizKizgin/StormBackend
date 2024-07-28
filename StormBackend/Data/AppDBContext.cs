@@ -114,6 +114,12 @@ public class AppDBContext : IdentityDbContext<User>
                 .WithMany()
                 .HasForeignKey(m => m.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
+                
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany()
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Chat)
