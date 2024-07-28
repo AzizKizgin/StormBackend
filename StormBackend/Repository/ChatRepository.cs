@@ -28,6 +28,9 @@ namespace StormBackend.Repository
         {
             var result = FindByCondition(c => c.Members.Any(m => m.UserId == userId) && c.Members.Any(m => m.UserId == targetId), trackChanges)
                 .Include(c => c.Members)
+                .ThenInclude(m => m.User)
+                .Include(c => c.Messages)
+                .ThenInclude(m => m.Sender)
                 .FirstOrDefaultAsync();   
             return result;
         }
@@ -36,6 +39,9 @@ namespace StormBackend.Repository
         {
             var result = FindByCondition(c => c.Id.ToString() == chatId, trackChanges)
                 .Include(c => c.Members)
+                .ThenInclude(m => m.User)
+                .Include(c => c.Messages)
+                .ThenInclude(m => m.Sender)
                 .FirstOrDefaultAsync();
             return result;
         }
@@ -43,11 +49,11 @@ namespace StormBackend.Repository
         public Task<List<Chat>> GetChatsAsync(string userId, bool trackChanges)
         {
             var chats = FindByCondition(c => c.Members.Any(m => m.UserId == userId), trackChanges)
-                .Include(c => c.Messages.LastOrDefault())
-                .OrderByDescending(c => c.Messages.Last().CreatedAt)
+                .Include(c => c.Messages)
                 .Include(c => c.Members)
+                .ThenInclude(m => m.User)
+                .OrderByDescending(c => c.Messages.Max(m => m.CreatedAt))
                 .ToListAsync();
-
             return chats;
         }
 
