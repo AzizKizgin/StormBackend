@@ -31,7 +31,7 @@ namespace StormBackend.Repository
                 .Include(m => m.Sender)
                 .Include(m => m.Reactions)
                 .ThenInclude(r => r.User)
-                .OrderByDescending(m => m.CreatedAt)
+                .OrderBy(m => m.CreatedAt)
                 .FirstOrDefaultAsync();
             return result;
         }
@@ -42,7 +42,7 @@ namespace StormBackend.Repository
                 .Include(m => m.Sender)
                 .Include(m => m.Reactions)
                 .ThenInclude(r => r.User)
-                .OrderByDescending(m => m.CreatedAt)
+                .OrderBy(m => m.CreatedAt)
                 .ToListAsync();
             return result;
         }
