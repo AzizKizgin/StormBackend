@@ -17,9 +17,9 @@ namespace StormBackend.Models
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? EditedAt { get; set; }
-        public List<byte[]> Media { get; set; }
-        public List<string> ReadBy { get; set; }
-        public List<EmojiReaction> Reactions { get; set; }
+        public List<byte[]> Media { get; set; } = new List<byte[]>();
+        public List<string> ReadBy { get; set; } = new List<string>();
+        public List<EmojiReaction> Reactions { get; set; } = new List<EmojiReaction>();
     }
 
     public class EmojiReaction
