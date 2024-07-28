@@ -1,6 +1,7 @@
 using StormBackend.Extensions;
 using StormBackend.SignalR;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,15 +19,23 @@ builder.Services.ConfigureRepositories();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddSignalRCore();
 builder.Services.AddSignalR();
-var app = builder.Build();
 
+   builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll",
+            builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    });
+var app = builder.Build();
+app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
