@@ -50,6 +50,7 @@ namespace StormBackend.Repository
         {
             var chats = FindByCondition(c => c.Members.Any(m => m.UserId == userId), trackChanges)
                 .Include(c => c.Messages)
+                .Where(c => c.Messages.Count > 0)
                 .Include(c => c.Members)
                 .ThenInclude(m => m.User)
                 .OrderByDescending(c => c.Messages.Max(m => m.CreatedAt))
