@@ -78,33 +78,40 @@ namespace StormBackend.Services
         public async Task<ChatDto> GetChatByContactId(string userId, string contactUserId)
         {
             var chat = await _manager.Chat.GetChatByTargetIdAsync(userId, contactUserId, false);
-            if (chat == null)
+            if (chat != null)
             {
-                var newChat = new Chat
-                {
-                    Id = Guid.NewGuid(),
-                    Members = new List<ChatMembership>
-                    {
-                        new ChatMembership { UserId = userId },
-                        new ChatMembership { UserId = contactUserId }
-                    },
-                    Messages = new List<Message>()
-                };
-                _manager.Chat.CreateChat(newChat);
-                await _manager.SaveAsync();
-                chat = newChat;
+                var chatDto = _mapper.Map<ChatDto>(chat);
+                return chatDto;
             }
-            var chatDto = _mapper.Map<ChatDto>(chat);
-            return chatDto;
+           
+            var newChat = new Chat
+            {
+                Id = Guid.NewGuid(),
+                Members = new List<ChatMembership>
+                {
+                    new ChatMembership { UserId = userId },
+                    new ChatMembership { UserId = contactUserId }
+                },
+                Messages = new List<Message>()
+            };
+            _manager.Chat.CreateChat(newChat);
+            await _manager.SaveAsync();
+            var existingChat = await _manager.Chat.GetChatByIdAsync(newChat.Id.ToString(), false);
+            var newChatDto = _mapper.Map<ChatDto>(existingChat);
+            return newChatDto;
         }
 
         public async Task<ChatDto> GetChatById(string userId, string chatId)
         {
             var chat = await _manager.Chat.GetChatByIdAsync(chatId, false);
-            var messages = await _manager.Message.GetMessagesAsync(chatId, false);
-            chat.Messages = messages;
-            var chatDto = _mapper.Map<ChatDto>(chat);
-            return chatDto;
+            if (chat != null)
+            {
+                var messages = await _manager.Message.GetMessagesAsync(chatId, false);
+                chat.Messages = messages;
+                var chatDto = _mapper.Map<ChatDto>(chat);
+                return chatDto;
+            }
+            return null;
         }
 
         public async Task<List<ChatDto>> GetChats(string userId)
