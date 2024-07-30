@@ -31,9 +31,7 @@ namespace StormBackend.SignalR
         [HubMethodName("readMessage")]
         public async Task ReadMessage(string chat, string userId)
         {
-            await Clients.Group(chat).SendAsync("RecieveRead", userId);
+            await Clients.Group(chat).SendAsync("ReceiveRead", userId);
         }
-
-
     }
 }
