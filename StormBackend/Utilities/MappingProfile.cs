@@ -17,7 +17,8 @@ namespace StormBackend.Utilities
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDto>();
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.ProfilePicture, opt => opt.MapFrom(src => Convert.ToBase64String(src.ProfilePicture ?? new byte[0])));
             CreateMap<RegisterDto, User>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Username));
             CreateMap<CreateContactDto, Contact>()
