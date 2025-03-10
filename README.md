@@ -46,7 +46,7 @@ Roommate is a web application designed to help users find roommates and share ac
    dotnet run
    ```
 8. **Access the App:**
-  Open your web browser and navigate to `[http://localhost:5031](http://localhost:5117)`.
+  Open your web browser and navigate to [http://localhost:5117](http://localhost:5117).
 
 ## Frontend
 You can find roommate app for iOS [here](https://github.com/AzizKizgin/Storm)
