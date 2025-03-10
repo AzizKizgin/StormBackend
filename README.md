@@ -1,6 +1,6 @@
 # Storm
 
-Roommate is a web application designed to help users find roommates and share accommodations. It allows users to create accounts, post room advertisements, and save listings for future reference. The app is built using ASP.NET Core Web API.
+Storm is a real-time messaging app
 
 ## Features
 
